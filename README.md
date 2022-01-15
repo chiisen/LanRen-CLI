@@ -6,13 +6,18 @@ Lan(懶)Ren(人) CLI
 npm install commander --save
 ```
 
+# 安裝 node-rsa
+```
+npm install node-rsa
+```
+
 # 安裝 LanRen-CLI
 ```
 npm link
 ```
 這個指令將會幫助你把這個資料夾放進你的全域node module 中，這樣妳就不用部屬到 npm 上才能使用。
 
-# 解安裝 
+# 解安裝 LanRen-CLI
 ```
 npm unlink LanRen-CLI
 
