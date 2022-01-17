@@ -30,7 +30,7 @@ function encrypt(publicKey, x) {
 
 /**
  *
- * @returns 產出 RSA public/pprivate key 與 sql script
+ * @returns 產出 RSA public/private key 與 sql script
  */
 function exportKey(dc) {
   const key = new rsa({ b: 2048 })
