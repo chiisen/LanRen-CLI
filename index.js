@@ -2,19 +2,21 @@
 
 const { inspect } = require("util")
 const rsa = require("./rsa/rsa")
-const template = require("./template/dc_setting_common")
+const { dc_setting_common } = require("./template/dc_setting_common")
+const { dc_setting_update_endpoint } = require("./template/dc_setting_update_endpoint")
 
 const fs = require("fs")
 
 const program = require("commander")
 
 program
-  .version("0.0.2")
+  .version("0.0.3")
   .option("-d | --no-default", "no default, Remove default") // no- 開頭會預設 default 為 true
   .option("-demo | --demo [demoString]", "demo [demoString]", `default`) // 可以不填 demoString ，預設為 default
   .option("-e | --rsa_encrypt <decryptString>", "RSA 解密加密字串，須配合 private.pem")
   .option("-c | --rsa_create <dc>", "產生指定 dc 的 RSA public/private key 檔案")
   .option("-s | --dcsetting_common <dc>", "新增通用型單錢包的 dc_setting")
+  .option("-u | --dcsetting_update_endpoint <dc>", "更新 dc_setting 的 endpoint")
   .parse()
 
 // 是否顯示參數內容
@@ -60,5 +62,9 @@ if (opts.rsa_create) {
 }
 
 if (opts.dcsetting_common) {
-  template.dc_setting_common(program.getOptionValue("dcsetting_common"))
+  dc_setting_common(program.getOptionValue("dcsetting_common"))
+}
+
+if (opts.dcsetting_update_endpoint) {
+  dc_setting_update_endpoint(program.getOptionValue("dcsetting_update_endpoint"))
 }
