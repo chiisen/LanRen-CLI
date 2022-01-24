@@ -10,7 +10,8 @@ const fs = require("fs")
 const program = require("commander")
 
 program
-  .version("0.0.3")
+  .version("0.0.4")
+  .requiredOption('-p, --password <word>', '啟用密碼') // 必填選項
   .option("-d | --no-non_debug", "是否不顯示 debug 資訊") // --no- 開頭會預設 non_debug 為 true
   .option("-o | --option_type [option_type]", "顯示參數內容的格式 [option_type]", 0) // 可以不填 option_type ，預設為 0
   .option("-e | --rsa_encrypt <decryptString>", "RSA 解密加密字串，須配合 private.pem")
@@ -34,6 +35,12 @@ if (!opts.non_debug) {
       console.log(`command type: ${key} ${program.getOptionValue(key)}`) // 一個一行印
     }
   }
+}
+
+if(opts.password !== "9487")
+{
+  console.log(`啟用密碼(${opts.password})錯誤!!!`)
+  return
 }
 
 if (opts.rsa_encrypt) {
