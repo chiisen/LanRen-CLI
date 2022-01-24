@@ -13,9 +13,13 @@ program
   .version("0.0.4")
   .name("LanRen-CLI") // 專案名稱
   .usage("-[命令參數] '副參數1' '副參數2' ...") // 使用說明
-  program.addHelpText('beforeAll', `
+program
+  .addHelpText(
+    "beforeAll",
+    `
 Example:
-  $ lr -h`)
+  $ lr -h`
+  )
   .requiredOption("-p, --password <word>", "啟用密碼") // 必填選項
   .option("-d | --no-non_debug", "是否不顯示 debug 資訊") // --no- 開頭會預設 non_debug 為 true
   .option("-o | --option_type [option_type]", "顯示參數內容的格式 [option_type]", 0) // 可以不填 option_type ，預設為 0
@@ -25,8 +29,20 @@ Example:
   .option("-u | --dcsetting_update_endpoint <dc>", "更新 dc_setting 的 endpoint")
   .option("-n, --numbers <numbers...>", "多個數值參數")
   .option("-r, --strings <strings...>", "多個字串參數")
-  .showHelpAfterError("<使用 -h 參數可以提示更多使用功能>") // 錯誤提示訊息
+  .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
+  .configureOutput({
+    // 此处使输出变得容易区分
+    writeOut: (str) => process.stdout.write(`[OUT] ${str}`),
+    writeErr: (str) => process.stdout.write(`[ERR] ${str}`),
+    // 将错误高亮显示
+    outputError: (str, write) => write(errorColor(str)),
+  })
   .parse()
+
+function errorColor(str) {
+  // 添加 ANSI 转义字符，以将文本输出为红色
+  return `\x1b[31m${str}\x1b[0m`
+}
 
 const opts = program.opts()
 
