@@ -11,15 +11,21 @@ const program = require("commander")
 
 program
   .version("0.0.4")
-  .requiredOption('-p, --password <word>', '啟用密碼') // 必填選項
+  .name("LanRen-CLI") // 專案名稱
+  .usage("-[命令參數] '副參數1' '副參數2' ...") // 使用說明
+  program.addHelpText('beforeAll', `
+Example:
+  $ lr -h`)
+  .requiredOption("-p, --password <word>", "啟用密碼") // 必填選項
   .option("-d | --no-non_debug", "是否不顯示 debug 資訊") // --no- 開頭會預設 non_debug 為 true
   .option("-o | --option_type [option_type]", "顯示參數內容的格式 [option_type]", 0) // 可以不填 option_type ，預設為 0
   .option("-e | --rsa_encrypt <decryptString>", "RSA 解密加密字串，須配合 private.pem")
   .option("-c | --rsa_create <dc>", "產生指定 dc 的 RSA public/private key 檔案")
   .option("-s | --dcsetting_common <dc>", "新增通用型單錢包的 dc_setting")
   .option("-u | --dcsetting_update_endpoint <dc>", "更新 dc_setting 的 endpoint")
-  .option('-n, --numbers <numbers...>', '多個數值參數')
-  .option('-r, --strings <strings...>', '多個字串參數')
+  .option("-n, --numbers <numbers...>", "多個數值參數")
+  .option("-r, --strings <strings...>", "多個字串參數")
+  .showHelpAfterError("<使用 -h 參數可以提示更多使用功能>") // 錯誤提示訊息
   .parse()
 
 const opts = program.opts()
@@ -44,8 +50,7 @@ if (!opts.non_debug) {
 /**
  * @note 必填選項-啟用密碼
  */
-if(opts.password !== "9487")
-{
+if (opts.password !== "9487") {
   console.log(`啟用密碼(${opts.password})錯誤!!!`)
   return
 }
@@ -53,9 +58,8 @@ if(opts.password !== "9487")
 /**
  * @note 多個數值參數
  */
-if(opts.numbers)
-{
-  opts.numbers.map(x => {
+if (opts.numbers) {
+  opts.numbers.map((x) => {
     console.log(`numbers=${x}`)
   })
 }
@@ -63,9 +67,8 @@ if(opts.numbers)
 /**
  * @note 多個字串參數
  */
-if(opts.strings)
-{
-  opts.strings.map(x => {
+if (opts.strings) {
+  opts.strings.map((x) => {
     console.log(`strings=${x}`)
   })
 }
