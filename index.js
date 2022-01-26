@@ -29,7 +29,7 @@ Example:
   .option("-o | --option_type [option_type]", "顯示參數內容的格式 [option_type]", 0) // 可以不填 option_type ，預設為 0
   .option("-e | --rsa_encrypt <decryptString>", "RSA 解密加密字串，須配合 private.pem")
   .option("-c | --rsa_create <dc>", "產生指定 dc 的 RSA public/private key 檔案")
-  .option("-s | --dcsetting_common <dc>", "新增通用型單錢包的 dc_setting")
+  .option("-s | --dcsetting_common <dc>", "新增通用型單錢包的 dc_setting (-s dc)")
   .option("-u | --dcsetting_update_endpoint <dc...>", "更新 dc_setting 的 endpoint (-u dc https)")
   .option("-n, --numbers <numbers...>", "多個數值參數")
   .option("-r, --strings <strings...>", "多個字串參數")
@@ -128,6 +128,7 @@ if (opts.rsa_create) {
  */
 if (opts.dcsetting_common) {
   dc_setting_common(program.getOptionValue("dcsetting_common"))
+  console.warn(errorColor(`內容要重新填過!`))
   console.log(`新增通用型單錢包的 dc_setting 完成!`)
 }
 
