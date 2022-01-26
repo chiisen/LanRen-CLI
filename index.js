@@ -48,6 +48,14 @@ function errorColor(str) {
   return `\x1b[31m${str}\x1b[0m`
 }
 
+function warnColor(str) {
+  return `\x1b[33m${str}\x1b[0m`
+}
+
+function successColor(str) {
+  return `\x1b[32m${str}\x1b[0m`
+}
+
 console.log("program.args: " + program.args)
 
 const opts = program.opts()
@@ -128,8 +136,8 @@ if (opts.rsa_create) {
  */
 if (opts.dcsetting_common) {
   dc_setting_common(program.getOptionValue("dcsetting_common"))
-  console.warn(errorColor(`內容要重新填過!`))
-  console.log(`新增通用型單錢包的 dc_setting 完成!`)
+  console.warn(warnColor(`內容要重新填過!`))
+  console.log(successColor(`新增通用型單錢包的 dc_setting 完成!`))
 }
 
 /**
@@ -140,7 +148,7 @@ if (opts.dcsetting_update_endpoint) {
 
   const dc = opts.dcsetting_update_endpoint[0]
   const endpoint = opts.dcsetting_update_endpoint[1]
-  console.log(`dc = ${dc}
+  console.log(successColor(`dc = ${dc}
   endpoint = ${endpoint}
-  更新 dc_setting 的 endpoint 完成!`)
+  更新 dc_setting 的 endpoint 完成!`))
 }
