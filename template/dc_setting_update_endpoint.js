@@ -3,9 +3,13 @@ const fs = require("fs")
 /**
  * 更新 dc_setting 的 endpoint
  *
- * @param {*} dc
+ * @param {*} opts[0] dc
+ * @param {*} opts[1] http
  */
-function dc_setting_update_endpoint(dc) {
+function dc_setting_update_endpoint(opts) {
+  const dc = opts[0]
+  const endpoint = opts[1]
+
   const rootPath = `dc_setting_update_endpoint`
   const path = `./${rootPath}`
   if (!fs.existsSync(path)) {
@@ -31,7 +35,7 @@ function dc_setting_update_endpoint(dc) {
   fs.writeFileSync(
     `${subPath}/alter.sql`,
     `UPDATE game.dc_setting
-    SET Endpoint = 'https://'
+    SET Endpoint = '${endpoint}'
     WHERE  DC='${dc}';`,
     "utf8"
   )

@@ -30,7 +30,7 @@ Example:
   .option("-e | --rsa_encrypt <decryptString>", "RSA 解密加密字串，須配合 private.pem")
   .option("-c | --rsa_create <dc>", "產生指定 dc 的 RSA public/private key 檔案")
   .option("-s | --dcsetting_common <dc>", "新增通用型單錢包的 dc_setting")
-  .option("-u | --dcsetting_update_endpoint <dc>", "更新 dc_setting 的 endpoint")
+  .option("-u | --dcsetting_update_endpoint <dc...>", "更新 dc_setting 的 endpoint (-u dc https)")
   .option("-n, --numbers <numbers...>", "多個數值參數")
   .option("-r, --strings <strings...>", "多個字串參數")
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
@@ -126,11 +126,18 @@ if (opts.rsa_create) {
  */
 if (opts.dcsetting_common) {
   dc_setting_common(program.getOptionValue("dcsetting_common"))
+  console.log(`新增通用型單錢包的 dc_setting 完成!`)
 }
 
 /**
  * @note 更新 dc_setting 的 endpoint
  */
 if (opts.dcsetting_update_endpoint) {
-  dc_setting_update_endpoint(program.getOptionValue("dcsetting_update_endpoint"))
+  dc_setting_update_endpoint(opts.dcsetting_update_endpoint)
+
+  const dc = opts.dcsetting_update_endpoint[0]
+  const endpoint = opts.dcsetting_update_endpoint[1]
+  console.log(`dc = ${dc}
+  endpoint = ${endpoint}
+  更新 dc_setting 的 endpoint 完成!`)
 }
