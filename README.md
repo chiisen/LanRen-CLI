@@ -40,3 +40,20 @@ lr -h
 or
 lr --help
 ```
+
+# 偵錯 launch.json
+## 多參數偵錯
+```
+"args": [
+                "-p","9487",
+                "-u", "ddcc", "httphttp"
+            ],
+```
+## 偵錯訊息輸出到指定視窗
+```
+"console": "internalConsole"
+```
+或
+```
+"console": "integratedTerminal"
+```
