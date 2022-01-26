@@ -13,9 +13,10 @@
             ],
             "program": "${workspaceFolder}\\index.js",
             "args": [
-                "-p9487"
+                "-p","9487",
+                "-u", "ddcc", "httphttp"
             ],
-            "console": "integratedTerminal"
+            "console": "internalConsole"
         }
     ]
 }

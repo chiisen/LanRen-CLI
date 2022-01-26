@@ -48,6 +48,8 @@ function errorColor(str) {
   return `\x1b[31m${str}\x1b[0m`
 }
 
+console.log("program.args: " + program.args)
+
 const opts = program.opts()
 
 console.log(`是否不顯示 debug 資訊: non_debug = ${opts.non_debug} ` + (opts.non_debug ? "(不顯示)" : "(顯示)"))

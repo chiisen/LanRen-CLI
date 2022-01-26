@@ -15,10 +15,20 @@ function dc_setting_update_endpoint(opts) {
   if (!fs.existsSync(path)) {
     fs.mkdirSync(path)
   }
-  const subPath = `${path}/${dc}`
-  if (!fs.existsSync(subPath)) {
-    fs.mkdirSync(subPath)
+  let subPath = `${path}/${dc}`
+  let count = 0
+  do {    
+    if (!fs.existsSync(subPath)) {
+      fs.mkdirSync(subPath)
+    }
+    else{
+      count += 1
+      subPath += `-${count}`
+      continue
+    }
   }
+  while (!fs.existsSync(subPath));
+  
   fs.writeFileSync(
     `${subPath}/README.md`,
     `調整 ${dc} 的 dc setting 設定資料的 Endpoint 設定
