@@ -108,7 +108,7 @@ if (opts.strings) {
  */
 if (opts.rsa_encrypt) {
   console.log(`\n 開始 RSA 解密`)
-  // `XURMCTI2iufOI1AeyIKJmn8RmOEiEZAlUJHAw+RrwE0Yb/0OswwBA6yviW6Yd6dePkSL7Q1hsgCfdRFcpPKIjvzIyNs58Hi4Ib7QtHl5qLuQUJVqenohEsYx7PWV4gbC5GPRB8uDkLJCbnDXQr1iRU9/nUgHIGBq8x5rBKjE1ejnovSEETgVGh8+HbLpMC36jJfS4dwRT7aatZ96AJED+COuAFC8icnjcssQEBnQg675wDo7vi5UrXLac8tLxEQwg61VMYjiC63xw19Vf2W/ueR3Es9B5lStREFqdf9hD5mHkjuMYWIMNhsKm60cZ48WqiArwwZsFWsINCUcDJD8WEBWqfocEVnH3nAg9GIfnIwsjEqHZxjmyatvVkF0PYwOZD8NqhWh2sv0jBpR/8WP+rwfuMVKoWdJlU6qmySHlAtektX5CHvUH2lEZh4r8xL6CrwveVi56f0O9EBaSaAUNebTgFr5jNLiJH0URqApTOHdHzqWHdaMtaebNcaTjVKKm+fEG9bFICI5r2tNDwq9tg0xFl8660mchZM1TuHkA1FDoKMVTRWbmeT9Gpgrc6dCbdOxAFyMOxktwZ706jrZuruZmnGonkd1uz1BpVoJQgYKxNTY61ObwRvc4T8BHMGoijyp7KCJh2XBSpTas4dqgtfVQtHqZ1Bu6L/Z2Tj+nNhRFc/xpqCYmzVBZKOUkivj1+BgcOClSEu4A+E1lopgvfOVLN2LYnlylgQfC77BvcPtLxoCLgCOLKbYR6+vYvUO5jJooIrVgm5guuYbKHv5gpJpsHrIVlbd0vnSgA9gBNsvzuLJmkoS+MigPGV7IouVvUVccTbd7cIqTMWqK/w+BK8R79zj4cX2OvtoPiANLb2wwM7cmv9z9/AY+HRNdNzxgTZ/fVIa0s9CKl1o27FZprcHPcwdiYAvU+EvOAEHS1WAnbmWO1c/SenZjkdCME92q+xNy/CYM7JDrDEVRcmCM8/5EhXFgE0h3oeNGYs/CJhq9ZMcZEVISyAu184GB7DB`
+  // ``
   // 上面可測試解密
   const decryptString = program.getOptionValue("rsa_encrypt")
 
@@ -148,7 +148,9 @@ if (opts.dcsetting_update_endpoint) {
 
   const dc = opts.dcsetting_update_endpoint[0]
   const endpoint = opts.dcsetting_update_endpoint[1]
-  console.log(successColor(`dc = ${dc}
+  console.log(
+    successColor(`dc = ${dc}
   endpoint = ${endpoint}
-  更新 dc_setting 的 endpoint 完成!`))
+  更新 dc_setting 的 endpoint 完成!`)
+  )
 }

@@ -1,15 +1,34 @@
 # LanRen-CLI
 Lan(懶)Ren(人) CLI
 
-# 安裝 commander
+# -p 啟用密碼
+一定要輸入，可以避免誤用
 ```
-npm install commander --save
+lr -p 9468
 ```
 
-# 安裝 node-rsa
+# -d 是否不顯示 debug 資訊(預設不顯示)
 ```
-npm install node-rsa
+lr -p 9487 -d
 ```
+
+# -o 顯示參數內容的格式(預設 0)
+必須在 -d 開啟才有作用
+```
+lr -p 9487 -d -o
+```
+
+# -e RSA 解密加密字串，須配合 private.pem
+
+# -c 產生指定 dc 的 RSA public/private key 檔案
+
+# -s 新增通用型單錢包的 dc_setting (-s dc)
+
+# -u 更新 dc_setting 的 endpoint (-u dc https)
+
+# -n 多個數值參數
+
+# -r 多個字串參數
 
 # 安裝 LanRen-CLI
 ```

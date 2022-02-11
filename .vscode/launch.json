@@ -14,6 +14,7 @@
             "program": "${workspaceFolder}\\index.js",
             "args": [
                 "-p","9487",
+                "-d","",
                 "-u", "ddcc", "httphttp"
             ],
             "console": "internalConsole"
