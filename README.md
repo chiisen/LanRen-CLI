@@ -36,18 +36,31 @@ lr -p 9487 -e GcJm/aznlvdMCgL1cdKPMjELp0BnoFhWxtHZUvmH8DXSwac9P0PgeJg1W+RCtIuCbA
 
 # -c 產生指定 dc 的 RSA public/private key 檔案
 ```
-lr -p 9487 -c
+lr -p 9487 -c dc
 ```
+.\rsa_create\dc\ 目錄內會有
+alter.sql
+private.pem
+public.pem
+這三個檔案
 
 # -s 新增通用型單錢包的 dc_setting
 ```
 lr -p 9487 -s dc
 ```
+.\dc_setting_common\dc\ 目錄內會有
+alter.sql
+README.md
+這兩個檔案
 
 # -u 更新 dc_setting 的 endpoint
 ```
 lr -p 9487 -u dc https
 ```
+.\dc_setting_update_endpoint\dc\ 目錄內會有
+alter.sql
+README.md
+這兩個檔案
 
 # -n 多個數值參數
 

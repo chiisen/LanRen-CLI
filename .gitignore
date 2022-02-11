@@ -104,3 +104,6 @@ dist
 .tern-port
 /private.pem
 /public.pem
+/dc_setting_common
+/dc_setting_update_endpoint
+/rsa_create
