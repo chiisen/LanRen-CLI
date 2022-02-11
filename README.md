@@ -19,12 +19,35 @@ lr -p 9487 -d -o
 ```
 
 # -e RSA 解密加密字串，須配合 private.pem
+## private.pem
+例如:下方為 private.pem 檔案內容，放在執行目錄下:
+```
+-----BEGIN RSA PRIVATE KEY----- MIIEpQIBAAKCAQEAtrXgwgPpAAwqgKzvLVbVzN318hqpKnF+GzTnxvNBh641of4G SfzVSPmwdIVNqNyxsFoD7bIh2XGD3aPSnn7Jd/9f7riEel5j2XOaTQzma9dozJlO vHHxsj912u46gZ4EeX2lp7Evsz5tQT5zLrZg+34SMBfS/LebZbdSY0hF4kNo/c1J 1gsqpAJ4xxfXxnpDPEgFCq25h4XgFOhK/7+DRbsOrng6Amm2YEA+ftjbxLw60pyI hgynvktfbFrhAAkmh2TdE2baXp5lPyTSGUv3MaClZU0R2Yy4iqFPDAFFUff2Louv dXapwBwYiJSmXtErWaToCuaHHMlE+x4eNLzqDwIDAQABAoIBAC5TlWZ8KVLqwsgX kRl04Abu7JJzchsh5bCuTGpkeWQWpuCpER0nb0jujnAs8JD1TFSDrmVRekWxA5dq F1g6m4jChqd3v5drYXPcXO5WbAJB/v+Ji646Uec5Mf/N0aXV1Bqd4ifPxGF1Xaxi UkAw3AxIXgI1uDh9sXgr8EbeJ2ID+R7TDh1cHLsulPADmqK+MAytu85GXf0Z3jE0 NcGsJdMZtjM4gco/Ucm00GskBtpk0p1AuoERWZboh7CVTiE9ROF8kMCWUYekzf3G ugNY5eFZOOrzgSkfJxLGThHBIEIpaDeRPpqS1f1XVtyZcFmasKkT+SUnWgzQFb6U J/S3MkECgYEA890Am0BNNCO5RV9a6Fp4URjdpy7QSo3BWGi8eVQY+6FxHmbAp+MY hIPP8KLsUtk0uMtvJR3wACATdhfz6dcvo/YsWCcPNes3xF8CDPoIMeGEmiETlSUv g9LWGW8cGg0XBmfsvbPQfqFM9hp+8RVx9/uCarBVPqJVSj8dEc1ALOECgYEAv82+ WvxvMOpxeFJ0QWwWXKQ2VVrKpk50yNKx9XnEhHrOz1fl1aZ0xDeCV7BRgVloxePQ wZ3xQved92S/ehIS1WSo9pnfmQUqnNSKHbhqjzAr6HJMEJ9YeSrisMBbSTLENtQM N0FbeM9Daki8elfKi4Isvx6hgJ1sIRW6yg2PhO8CgYEA0kQwjay35MkYqpQ5kjbP nz1NgSWAO4hWuaA1QngcwnrFSm1WmGvbbAcreFVCZ30ZVG00fFB/69u8bArjKTF9 xmYwfiHPn7Ic95jj78R25GuLJkp21BaoDYXxTSTcminHPKLHIhq1Hzp9XYYjBkRz bFrUbKF2Hvdhiw84RW0wdIECgYEAqbdeBphzsu7f9L3RDMqdht/vC9vIkRu/DqwQ t8tFboxUTvfR8RjXHYCYnwrvM+tvYBtTbt9Yyg7dAjltjJBNhfEJ6RsC1R3TNO6E QAQclhLj50yrrdGxsZWW/RtYKw72vCUpogL884tCddtim0bvfD51Za+u7GVfdm8J 1xvksJUCgYEApTXNIdEHRdXuyVrgyM9/krpwcqP5RZ6cgNB0wCcZrxxQ6stKpXO9 JH+MmnFkYG6TlUoDQO79UW+ftNPC9kuZTW2cdQmCMjUEbrS248lKSSZcxiAOlGyF mgKIPLvSzpWfTqMZG4owQ5fmBTBJmlT64MKNVTl9Vs0TnO0J/gWOpQc= -----END RSA PRIVATE KEY-----
+```
+## 解密內容
+執行下面指令，就可以解開內容:
+```
+lr -p 9487 -e GcJm/aznlvdMCgL1cdKPMjELp0BnoFhWxtHZUvmH8DXSwac9P0PgeJg1W+RCtIuCbA6XdXdkQpQd+A1JuWNzRn1C9EgpbWgCQpki1gf0Pm1On/1EB2dc5pdx6niv5BR6XMt0VQGf3fjRYyyQR1JnnsAtM/jETfLEJN+ZHB9e/slnaYSEWPAeqMC/nNj+lqa1B4EmZGlnK4gA2M5G3GNNBYo3uCJRK5mnzG24Wkw11ZM/20WHG1qdeQLIwWivXTwLXu1CxilslzCT8SJEv+97C+0TYrKNZmjQMkewmZQhYXfL1SUYq1XNmA33MxKr0oty7Pvt9jcrVZKCy92dCbqmnw==
+```
+解密內容如下所示:
+```
+{"ts":"1644546067938","secureToken":"25b88970ed5c608a8642dd3cdae5d530bd698d45d4c9b3e9cec55162c820d378","action":99,"username":"test001","gameId":200536}
+```
 
 # -c 產生指定 dc 的 RSA public/private key 檔案
+```
+lr -p 9487 -c
+```
 
-# -s 新增通用型單錢包的 dc_setting (-s dc)
+# -s 新增通用型單錢包的 dc_setting
+```
+lr -p 9487 -s dc
+```
 
-# -u 更新 dc_setting 的 endpoint (-u dc https)
+# -u 更新 dc_setting 的 endpoint
+```
+lr -p 9487 -u dc https
+```
 
 # -n 多個數值參數
 
