@@ -5,6 +5,8 @@ const rsa = require("./rsa/rsa")
 const { dc_setting_common } = require("./template/dc_setting_common")
 const { dc_setting_update_endpoint } = require("./template/dc_setting_update_endpoint")
 
+const { errorColor, warnColor, successColor } = require("./color/color")
+
 const fs = require("fs")
 
 const program = require("commander")
@@ -42,19 +44,6 @@ Example:
     outputError: (str, write) => write(errorColor(str)),
   })
   .parse()
-
-function errorColor(str) {
-  // 添加 ANSI 转义字符，以将文本输出为红色
-  return `\x1b[31m${str}\x1b[0m`
-}
-
-function warnColor(str) {
-  return `\x1b[33m${str}\x1b[0m`
-}
-
-function successColor(str) {
-  return `\x1b[32m${str}\x1b[0m`
-}
 
 console.log("program.args: " + program.args)
 
