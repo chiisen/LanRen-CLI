@@ -62,6 +62,11 @@ alter.sql
 README.md
 這兩個檔案
 
+# -t 使用 token 產生網址
+```
+lr -p 9487 -t b5744b06397049c586842cae91a4d3ff
+```
+
 # -n 多個數值參數
 
 # -r 多個字串參數

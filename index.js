@@ -33,6 +33,7 @@ Example:
   .option("-c | --rsa_create <dc>", "產生指定 dc 的 RSA public/private key 檔案")
   .option("-s | --dcsetting_common <dc>", "新增通用型單錢包的 dc_setting (-s dc)")
   .option("-u | --dcsetting_update_endpoint <dc...>", "更新 dc_setting 的 endpoint (-u dc https)")
+  .option("-t | --url_token <token>", "使用 token 產生網址 (-t token)")
   .option("-n, --numbers <numbers...>", "多個數值參數")
   .option("-r, --strings <strings...>", "多個字串參數")
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
@@ -141,5 +142,11 @@ if (opts.dcsetting_update_endpoint) {
     successColor(`dc = ${dc}
   endpoint = ${endpoint}
   更新 dc_setting 的 endpoint 完成!`)
+  )
+}
+
+if (opts.url_token) {
+  console.log(
+    successColor(`http://api2.i8.games/pageJumper/VA/login?token=${program.getOptionValue("url_token")}&language=zh-CN&icon=VA`)
   )
 }
