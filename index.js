@@ -13,6 +13,8 @@ const { fix_json } = require("./commander/fix_json")
 
 const fs = require("fs")
 
+var clc = require("cli-color")
+
 const program = require("commander")
 
 const package = require("./package.json")
@@ -53,7 +55,7 @@ const opts = program.opts()
 const keys = Object.keys(opts).length
 if(keys <= 2)
 {
-  console.log(errorColor("請輸入參數，或輸入 lr -h 查詢使用說明。"))
+  console.log(clc.blue("請輸入參數，或輸入") + clc.red(" lr -h ") + clc.blue("查詢使用說明。"))
   return
 }
 
