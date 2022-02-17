@@ -2,6 +2,8 @@
 
 const { inspect } = require("util")
 
+const crypto = require("crypto")
+
 const rsa = require("./rsa/rsa")
 const { dc_setting_common } = require("./template/dc_setting_common")
 const { dc_setting_update_endpoint } = require("./template/dc_setting_update_endpoint")
@@ -39,6 +41,9 @@ Example:
   .option("-u | --dcsetting_update_endpoint <dc...>", "更新 dc_setting 的 endpoint (-u dc https)")
   .option("-t | --url_token <token>", "使用 token 產生網址 (-t token)")
   .option("-j | --fix_json <str>", "格式化 json 字串 (-j str)")
+  .option("-m | --md5 <str>", "md5 密碼不可逆加密 (-m str)")
+  .option("-h | --sha1 <str>", "sha1 密碼不可逆加密 (-h str)")
+  .option("-a | --ase <str>", "ase 加解密 (-a str)")
   .option("-n, --numbers <numbers...>", "多個數值參數")
   .option("-r, --strings <strings...>", "多個字串參數")
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
@@ -53,13 +58,14 @@ Example:
 
 const opts = program.opts()
 const keys = Object.keys(opts).length
-if(keys <= 2)
-{
+if (keys <= 2) {
   console.log(clc.blue("請輸入參數，或輸入") + clc.red(" lr -h ") + clc.blue("查詢使用說明。"))
   return
 }
 
-console.log(warnColor(`是否不顯示 debug 資訊: non_debug = ${opts.non_debug} ` + (opts.non_debug ? "(不顯示)" : "(顯示)")))
+console.log(
+  warnColor(`是否不顯示 debug 資訊: non_debug = ${opts.non_debug} ` + (opts.non_debug ? "(不顯示)" : "(顯示)"))
+)
 
 /**
  *  印出 option 的參數
@@ -74,6 +80,53 @@ if (!opts.non_debug) {
       console.log(`command type: ${key} ${program.getOptionValue(key)}`) // 一個一行印
     }
   }
+}
+
+/**
+ * md5 不可逆加密
+ */
+if (opts.md5) {
+  const str = program.getOptionValue("md5")
+  const pwd = crypto.createHash("md5").update(str).digest("hex")
+  console.log("md5 不可逆加密: " + clc.yellow(pwd))
+}
+
+/**
+ * sha1 不可逆加密
+ */
+if (opts.sha1) {
+  const str = program.getOptionValue("sha1")
+  const pwd = crypto.createHash("sha1").update(str).digest("hex")
+  console.log("sha1 不可逆加密: " + clc.yellow(pwd))
+}
+
+/**
+ * ASE 加解密
+ */
+if (opts.ase) {
+  const data = program.getOptionValue("ase")
+
+
+  const mode = "aes-128-cbc"
+
+  const key = "9vApxLk5G3PAsJrM"
+  console.log("ASE key: " + key)
+  const iv = "FnJL7EDzjqWjcaY9"
+  console.log("ASE iv: " + iv)
+
+  // 加密
+  let sign = ""
+  const cipher = crypto.createCipheriv(mode, key, iv)
+  sign = cipher.update(data, "utf8", "hex")
+  sign += cipher.final("hex")
+  console.log("ASE 加密: " + sign)
+
+  // 解密
+  let src = ""
+  const decipher = crypto.createDecipheriv(mode, key, iv)
+  src = decipher.update(sign, "hex", "utf8")
+  src += decipher.final("utf8")
+  console.log("ASE 解密: " + src)
 }
 
 /**
