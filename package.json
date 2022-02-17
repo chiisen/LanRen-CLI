@@ -1,6 +1,6 @@
 {
   "name": "lanren-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "LanRen CLI",
   "main": "index.js",
   "scripts": {
