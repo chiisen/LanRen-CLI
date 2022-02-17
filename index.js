@@ -19,7 +19,7 @@ const package = require("./package.json")
 
 program
   .version(package.version)
-  .name("LanRen-CLI") // 專案名稱
+  .name(package.name) // 專案名稱
   .usage("-[命令參數] '副參數1' '副參數2' ...") // 使用說明
 program
   .addHelpText(
@@ -28,10 +28,7 @@ program
 Example:
   $ lr -h`
   )
-  .description(
-    `說明:
-  懶人工具-CLI`
-  )
+  .description(package.description)
   .option("-d | --no-non_debug", "是否不顯示 debug 資訊") // --no- 開頭會預設 non_debug 為 true
   .option("-o | --option_type [option_type]", "顯示參數內容的格式 [option_type]", 0) // 可以不填 option_type ，預設為 0
   .option("-e | --rsa_encrypt <decryptString>", "RSA 解密加密字串，須配合 private.pem")
@@ -44,17 +41,21 @@ Example:
   .option("-r, --strings <strings...>", "多個字串參數")
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
   .configureOutput({
-    // 此处使输出变得容易区分
+    // 此處使輸出變得容易區分
     writeOut: (str) => process.stdout.write(`[OUT] ${str}`),
     writeErr: (str) => process.stdout.write(`[ERR] ${str}`),
-    // 将错误高亮显示
+    // 將錯誤高亮顯示
     outputError: (str, write) => write(errorColor(str)),
   })
   .parse()
 
-console.log("program.args: " + program.args)
-
 const opts = program.opts()
+const keys = Object.keys(opts).length
+if(keys <= 2)
+{
+  console.log(errorColor("請輸入參數，或輸入 lr -h 查詢使用說明。"))
+  return
+}
 
 console.log(warnColor(`是否不顯示 debug 資訊: non_debug = ${opts.non_debug} ` + (opts.non_debug ? "(不顯示)" : "(顯示)")))
 

@@ -1,9 +1,41 @@
 # LanRen-CLI
 Lan(懶)Ren(人) CLI
 
+![程式碼美圖](https://i.imgur.com/cAcoxOp.jpg)
+
 # 安裝(全域)
 ```
 npm install -g lanren-cli
+```
+
+# 原始程式碼連結安裝 LanRen-CLI
+```
+npm link
+```
+這個指令將會幫助你把這個資料夾放進你的全域node module 中，這樣妳就不用部屬到 npm 上才能使用。
+
+# 原始程式碼連結解安裝 LanRen-CLI
+```
+npm unlink LanRen-CLI
+
+
+npm rm --global LanRen-CLI
+
+npm ls --global LanRen-CLI
+```
+
+# 查看版本號
+```
+lr -V
+or
+lr --version
+```
+
+# 查看說明
+```
+lr -h
+or
+lr --help
 ```
 
 # -d 是否不顯示 debug 資訊(預設不顯示)
@@ -74,36 +106,6 @@ lr -j "{method:addWagers,data:[{Cid:oSY7SDQdnpjx2vphGpC8iC,PlayerName:i816420594
 # -n 多個數值參數
 
 # -r 多個字串參數
-
-# 安裝 LanRen-CLI
-```
-npm link
-```
-這個指令將會幫助你把這個資料夾放進你的全域node module 中，這樣妳就不用部屬到 npm 上才能使用。
-
-# 解安裝 LanRen-CLI
-```
-npm unlink LanRen-CLI
-
-
-npm rm --global LanRen-CLI
-
-npm ls --global LanRen-CLI
-```
-
-# 查看版本號
-```
-lr -V
-or
-lr --version
-```
-
-# 查看說明
-```
-lr -h
-or
-lr --help
-```
 
 # 偵錯 launch.json
 ## 多參數偵錯

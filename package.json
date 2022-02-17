@@ -1,7 +1,7 @@
 {
   "name": "lanren-cli",
-  "version": "1.0.5",
-  "description": "LanRen CLI",
+  "version": "1.0.8",
+  "description": "Lan(懶)Ren(人) CLI",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
