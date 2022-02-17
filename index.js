@@ -15,8 +15,10 @@ const fs = require("fs")
 
 const program = require("commander")
 
+const package = require("./package.json")
+
 program
-  .version("0.0.4")
+  .version(package.version)
   .name("LanRen-CLI") // 專案名稱
   .usage("-[命令參數] '副參數1' '副參數2' ...") // 使用說明
 program
