@@ -1,21 +1,15 @@
 # LanRen-CLI
 Lan(懶)Ren(人) CLI
 
-# -p 啟用密碼
-一定要輸入，可以避免誤用
-```
-lr -p 9468
-```
-
 # -d 是否不顯示 debug 資訊(預設不顯示)
 ```
-lr -p 9487 -d
+lr  -d
 ```
 
 # -o 顯示參數內容的格式(預設 0)
 必須在 -d 開啟才有作用
 ```
-lr -p 9487 -d -o
+lr  -d -o
 ```
 
 # -e RSA 解密加密字串，須配合 private.pem
@@ -27,7 +21,7 @@ lr -p 9487 -d -o
 ## 解密內容
 執行下面指令，就可以解開內容:
 ```
-lr -p 9487 -e GcJm/aznlvdMCgL1cdKPMjELp0BnoFhWxtHZUvmH8DXSwac9P0PgeJg1W+RCtIuCbA6XdXdkQpQd+A1JuWNzRn1C9EgpbWgCQpki1gf0Pm1On/1EB2dc5pdx6niv5BR6XMt0VQGf3fjRYyyQR1JnnsAtM/jETfLEJN+ZHB9e/slnaYSEWPAeqMC/nNj+lqa1B4EmZGlnK4gA2M5G3GNNBYo3uCJRK5mnzG24Wkw11ZM/20WHG1qdeQLIwWivXTwLXu1CxilslzCT8SJEv+97C+0TYrKNZmjQMkewmZQhYXfL1SUYq1XNmA33MxKr0oty7Pvt9jcrVZKCy92dCbqmnw==
+lr -e GcJm/aznlvdMCgL1cdKPMjELp0BnoFhWxtHZUvmH8DXSwac9P0PgeJg1W+RCtIuCbA6XdXdkQpQd+A1JuWNzRn1C9EgpbWgCQpki1gf0Pm1On/1EB2dc5pdx6niv5BR6XMt0VQGf3fjRYyyQR1JnnsAtM/jETfLEJN+ZHB9e/slnaYSEWPAeqMC/nNj+lqa1B4EmZGlnK4gA2M5G3GNNBYo3uCJRK5mnzG24Wkw11ZM/20WHG1qdeQLIwWivXTwLXu1CxilslzCT8SJEv+97C+0TYrKNZmjQMkewmZQhYXfL1SUYq1XNmA33MxKr0oty7Pvt9jcrVZKCy92dCbqmnw==
 ```
 解密內容如下所示:
 ```
@@ -36,7 +30,7 @@ lr -p 9487 -e GcJm/aznlvdMCgL1cdKPMjELp0BnoFhWxtHZUvmH8DXSwac9P0PgeJg1W+RCtIuCbA
 
 # -c 產生指定 dc 的 RSA public/private key 檔案
 ```
-lr -p 9487 -c dc
+lr -c dc
 ```
 .\rsa_create\dc\ 目錄內會有
 alter.sql
@@ -46,7 +40,7 @@ public.pem
 
 # -s 新增通用型單錢包的 dc_setting
 ```
-lr -p 9487 -s dc
+lr -s dc
 ```
 .\dc_setting_common\dc\ 目錄內會有
 alter.sql
@@ -55,7 +49,7 @@ README.md
 
 # -u 更新 dc_setting 的 endpoint
 ```
-lr -p 9487 -u dc https
+lr -u dc https
 ```
 .\dc_setting_update_endpoint\dc\ 目錄內會有
 alter.sql
