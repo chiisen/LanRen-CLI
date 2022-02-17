@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const { inspect } = require("util")
+
 const rsa = require("./rsa/rsa")
 const { dc_setting_common } = require("./template/dc_setting_common")
 const { dc_setting_update_endpoint } = require("./template/dc_setting_update_endpoint")
@@ -34,6 +35,7 @@ Example:
   .option("-s | --dcsetting_common <dc>", "新增通用型單錢包的 dc_setting (-s dc)")
   .option("-u | --dcsetting_update_endpoint <dc...>", "更新 dc_setting 的 endpoint (-u dc https)")
   .option("-t | --url_token <token>", "使用 token 產生網址 (-t token)")
+  .option("-j | --fix_json <str>", "格式化 json 字串 (-j str)")
   .option("-n, --numbers <numbers...>", "多個數值參數")
   .option("-r, --strings <strings...>", "多個字串參數")
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
@@ -147,6 +149,26 @@ if (opts.dcsetting_update_endpoint) {
 
 if (opts.url_token) {
   console.log(
-    successColor(`http://api2.i8.games/pageJumper/VA/login?token=${program.getOptionValue("url_token")}&language=zh-CN&icon=VA`)
+    successColor(
+      `http://api2.i8.games/pageJumper/VA/login?token=${program.getOptionValue("url_token")}&language=zh-CN&icon=VA`
+    )
   )
+}
+
+/**
+ * 格式化 json 字串
+ */
+if (opts.fix_json) {
+  let str = program.getOptionValue("fix_json")
+
+  // 置換時間格式
+  str = str.replace(/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/, "$1-$2-$3=$4@$5@$6")
+
+  str = str.replace(/([a-zA-Z0-9-]+):([a-zA-Z0-9-]+),/g, '"$1":"$2",')
+  str = str.replace(/([a-zA-Z0-9-]+):/g, '"$1":')
+
+  // 還原時間格式
+  str = str.replace(/:(\d{4})-(\d{1,2})-(\d{1,2})=(\d{1,2})@(\d{1,2})@(\d{1,2})/, ':"$1-$2-$3 $4:$5:$6"')
+
+  console.log(successColor(str))
 }

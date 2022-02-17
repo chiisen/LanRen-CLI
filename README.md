@@ -67,6 +67,11 @@ README.md
 lr -p 9487 -t b5744b06397049c586842cae91a4d3ff
 ```
 
+# -j 格式化 json 字串
+```
+lr -p 9487 -j "{method:addWagers,data:[{Cid:oSY7SDQdnpjx2vphGpC8iC,PlayerName:i81642059481483iod6lf,Wid:wp2hkzo9foqn18030297wz0215150846932,GameId:180302,GGId:3,RoundId:wp2hkzo9foqn180302Cexi0215150846931,TotalWinGold:0,RealBetGold:10,RealBetPoint:1,WinGold:0,JPGold:0,JPPoolId:0,JPConGold:0,JPConGoldOriginal:0,Currency:THB,Denom:10,GameStatusCode:0,Repair:0,AddDate:2022-02-15 15:08:46,IsDemo:0}]}"
+```
+
 # -n 多個數值參數
 
 # -r 多個字串參數
