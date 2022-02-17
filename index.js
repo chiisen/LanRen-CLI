@@ -8,6 +8,9 @@ const { dc_setting_update_endpoint } = require("./template/dc_setting_update_end
 
 const { errorColor, warnColor, successColor } = require("./color/color")
 
+const { url_token } = require("./commander/url_token")
+const { fix_json } = require("./commander/fix_json")
+
 const fs = require("fs")
 
 const program = require("commander")
@@ -51,10 +54,10 @@ console.log("program.args: " + program.args)
 
 const opts = program.opts()
 
-console.log(`是否不顯示 debug 資訊: non_debug = ${opts.non_debug} ` + (opts.non_debug ? "(不顯示)" : "(顯示)"))
+console.log(warnColor(`是否不顯示 debug 資訊: non_debug = ${opts.non_debug} ` + (opts.non_debug ? "(不顯示)" : "(顯示)")))
 
 /**
- * @note 印出 option 的參數
+ *  印出 option 的參數
  */
 if (!opts.non_debug) {
   // 顯示參數內容的格式
@@ -69,7 +72,7 @@ if (!opts.non_debug) {
 }
 
 /**
- * @note 多個數值參數
+ *  多個數值參數
  */
 if (opts.numbers) {
   opts.numbers.map((x) => {
@@ -78,7 +81,7 @@ if (opts.numbers) {
 }
 
 /**
- * @note 多個字串參數
+ *  多個字串參數
  */
 if (opts.strings) {
   opts.strings.map((x) => {
@@ -87,7 +90,7 @@ if (opts.strings) {
 }
 
 /**
- * @note RSA 解密加密字串，須配合 private.pem
+ *  RSA 解密加密字串，須配合 private.pem
  */
 if (opts.rsa_encrypt) {
   console.log(`\n 開始 RSA 解密`)
@@ -108,23 +111,21 @@ if (opts.rsa_encrypt) {
 }
 
 /**
- * @note 產生指定 dc 的 RSA public/private key 檔案與 sql script
+ *  產生指定 dc 的 RSA public/private key 檔案與 sql script
  */
 if (opts.rsa_create) {
   rsa.exportKey(`rsa_create`, program.getOptionValue("rsa_create"))
 }
 
 /**
- * @note 新增通用型單錢包的 dc_setting
+ *  新增通用型單錢包的 dc_setting
  */
 if (opts.dcsetting_common) {
   dc_setting_common(program.getOptionValue("dcsetting_common"))
-  console.warn(warnColor(`內容要重新填過!`))
-  console.log(successColor(`新增通用型單錢包的 dc_setting 完成!`))
 }
 
 /**
- * @note 更新 dc_setting 的 endpoint
+ *  更新 dc_setting 的 endpoint
  */
 if (opts.dcsetting_update_endpoint) {
   dc_setting_update_endpoint(opts.dcsetting_update_endpoint)
@@ -138,29 +139,16 @@ if (opts.dcsetting_update_endpoint) {
   )
 }
 
+/**
+ * 使用 token 產生網址
+ */
 if (opts.url_token) {
-  console.log(
-    successColor(
-      `http://api2.i8.games/pageJumper/VA/login?token=${program.getOptionValue("url_token")}&language=zh-CN&icon=VA`
-    )
-  )
+  url_token(program.getOptionValue("url_token"))
 }
 
 /**
  * 格式化 json 字串
  */
 if (opts.fix_json) {
-  let str = program.getOptionValue("fix_json")
-
-  // 置換時間格式
-  str = str.replace(/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/, "$1-$2-$3=$4@$5@$6")
-
-  str = str.replace(/([a-zA-Z0-9-]+):([0-9-]+),/g, '"$1":$2,')
-  str = str.replace(/([a-zA-Z0-9-]+):([a-zA-Z0-9-]+),/g, '"$1":"$2",')
-  str = str.replace(/([a-zA-Z0-9-]+):/g, '"$1":')
-
-  // 還原時間格式
-  str = str.replace(/:(\d{4})-(\d{1,2})-(\d{1,2})=(\d{1,2})@(\d{1,2})@(\d{1,2})/, ':"$1-$2-$3 $4:$5:$6"')
-
-  console.log(successColor(str))
+  fix_json(program.getOptionValue("fix_json"))
 }

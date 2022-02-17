@@ -1,4 +1,5 @@
 const fs = require("fs")
+const { warnColor, successColor } = require("../color/color")
 
 /**
  * 新增通用型單錢包的 dc_setting
@@ -57,6 +58,9 @@ function dc_setting_common(dc) {
      );`,
     "utf8"
   )
+
+  console.warn(warnColor(`內容要重新填過!`))
+  console.log(successColor(`新增通用型單錢包的 dc_setting 完成!`))
 }
 
 module.exports = { dc_setting_common }
