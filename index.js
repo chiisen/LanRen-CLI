@@ -42,7 +42,7 @@ Example:
   .option("-t | --url_token <token>", "使用 token 產生網址 (-t token)")
   .option("-j | --fix_json <str>", "格式化 json 字串 (-j str)")
   .option("-m | --md5 <str>", "md5 密碼不可逆加密 (-m str)")
-  .option("-h | --sha1 <str>", "sha1 密碼不可逆加密 (-h str)")
+  .option("-b | --sha1 <str>", "sha1 密碼不可逆加密 (-b str)")
   .option("-a | --ase <str>", "ase 加解密 (-a str)")
   .option("-n, --numbers <numbers...>", "多個數值參數")
   .option("-r, --strings <strings...>", "多個字串參數")

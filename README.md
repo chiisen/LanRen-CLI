@@ -110,7 +110,7 @@ lr -j "{method:addWagers,data:[{Cid:oSY7SDQdnpjx2vphGpC8iC,PlayerName:i816420594
 
 # sha1 密碼不可逆加密
 ```
--h str
+-b str
 ```
 
 # ase 加解密
