@@ -111,17 +111,17 @@ lr -j "{method:addWagers,data:[{Cid:oSY7SDQdnpjx2vphGpC8iC,PlayerName:i816420594
 
 # -m md5 密碼不可逆加密
 ```
--m str
+lr -m str
 ```
 
 # sha1 密碼不可逆加密
 ```
--b str
+lr -b str
 ```
 
 # ase 加解密
 ```
--a str
+lr -a str
 ```
 # -n 多個數值參數
 
