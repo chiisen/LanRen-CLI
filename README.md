@@ -8,6 +8,12 @@ Lan(懶)Ren(人) CLI
 npm install -g lanren-cli
 ```
 
+```
+npm list -g
+```
+可以查詢安裝過的 package
+![npm list](https://i.imgur.com/a56xdBl.png)
+
 # 原始程式碼連結安裝 LanRen-CLI
 ```
 npm link
