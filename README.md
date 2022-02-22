@@ -11,7 +11,12 @@ npm install -g lanren-cli
 ```
 npm list -g
 ```
+或是
+```
+npm list -g --depth=0
+```
 可以查詢安裝過的 package
+
 ![npm list](https://i.imgur.com/a56xdBl.png)
 
 # 原始程式碼連結安裝 LanRen-CLI
