@@ -8,7 +8,7 @@ const rsa = require("./rsa/rsa")
 const { dc_setting_common } = require("./template/dc_setting_common")
 const { dc_setting_update_endpoint } = require("./template/dc_setting_update_endpoint")
 
-const { errorColor, warnColor, successColor } = require("./color/color")
+const { errorColor, warnColor, successColor, normalColor } = require("./color/color")
 
 const { url_token } = require("./commander/url_token")
 const { fix_json } = require("./commander/fix_json")
@@ -33,19 +33,30 @@ Example:
   $ lr -h`
   )
   .description(package.description)
-  .option("-d | --no-non_debug", "是否不顯示 debug 資訊") // --no- 開頭會預設 non_debug 為 true
-  .option("-o | --option_type [option_type]", "顯示參數內容的格式 [option_type]", 0) // 可以不填 option_type ，預設為 0
-  .option("-e | --rsa_encrypt <decryptString>", "RSA 解密加密字串，須配合 private.pem")
-  .option("-c | --rsa_create <dc>", "產生指定 dc 的 RSA public/private key 檔案")
-  .option("-s | --dcsetting_common <dc>", "新增通用型單錢包的 dc_setting (-s dc)")
-  .option("-u | --dcsetting_update_endpoint <dc...>", "更新 dc_setting 的 endpoint (-u dc https)")
-  .option("-t | --url_token <token>", "使用 token 產生網址 (-t token)")
-  .option("-j | --fix_json <str>", "格式化 json 字串 (-j str)")
-  .option("-m | --md5 <str>", "md5 密碼不可逆加密 (-m str)")
-  .option("-b | --sha1 <str>", "sha1 密碼不可逆加密 (-b str)")
-  .option("-a | --ase <str>", "ase 加解密 (-a str)")
+  .option("-a | --ase <str>", successColor("ase 加解密 ") + warnColor("(-a str)"))
+  .option("-b | --sha1 <str>", normalColor("sha1 密碼不可逆加密 ") + warnColor("(-b str)"))
+  .option("-c | --rsa_create <dc>", successColor("產生指定 dc 的 RSA public/private key 檔案") + warnColor("(-c dc)"))
+  .option("-d | --no-non_debug", normalColor("是否不顯示 debug 資訊")) // --no- 開頭會預設 non_debug 為 true
+  .option("-e | --rsa_encrypt <decryptString>", successColor("RSA 解密加密字串，須配合 private.pem") + warnColor("(-e str)"))
+  .option("-f | --ff <n>", errorColor("預留"))
+  .option("-g | --gg <n>", errorColor("預留")) // -h 預設為說明
+  .option("-i | --ii <n>", errorColor("預留"))
+  .option("-j | --fix_json <str>", successColor("格式化 json 字串 ") + warnColor("(-j str)"))
+  .option("-k | --kk <n>", errorColor("預留"))
+  .option("-l | --ll <n>", errorColor("預留"))
+  .option("-m | --md5 <str>", successColor("md5 密碼不可逆加密 ") + warnColor("(-m str)"))
   .option("-n, --numbers <numbers...>", "多個數值參數")
+  .option("-o | --option_type [option_type]", successColor("顯示參數內容的格式 [option_type]"), 0) // 可以不填 option_type ，預設為 0
+  .option("-p | --pp <n>", errorColor("預留"))
+  .option("-q | --qq <n>", errorColor("預留"))
   .option("-r, --strings <strings...>", "多個字串參數")
+  .option("-s | --dcsetting_common <dc>", successColor("新增通用型單錢包的 dc_setting ") + warnColor("(-s dc)"))
+  .option("-t | --url_token <token>", normalColor("使用 token 產生網址 ") + warnColor("(-t token)"))
+  .option("-u | --dcsetting_update_endpoint <dc...>", successColor("更新 dc_setting 的 endpoint ") + warnColor("(-u dc https)")) // -v 預設為顯示版本號
+  .option("-w | --ww <n>", errorColor("預留"))
+  .option("-x | --xx <n>", errorColor("預留"))
+  .option("-y | --yy <n>", errorColor("預留"))
+  .option("-z | --zz <n>", errorColor("預留"))  
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
   .configureOutput({
     // 此處使輸出變得容易區分

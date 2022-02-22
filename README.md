@@ -3,6 +3,9 @@ Lan(懶)Ren(人) CLI
 
 ![程式碼美圖](https://i.imgur.com/cAcoxOp.jpg)
 
+# 版本紀錄
+* 1.1.5 整理指令與調整順序，與改變說明字體顏色。
+
 # 安裝(全域)
 ```
 npm install -g lanren-cli
