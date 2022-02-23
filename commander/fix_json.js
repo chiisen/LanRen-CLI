@@ -18,6 +18,10 @@ function fix_json(str) {
   //2020-02-17 04:15:11
   str = str.replace(/(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})/, "$1-$2-$3=$4@$5@$6")
 
+  //IP檢查
+  //::ffff:210.242.152.252
+  str = str.replace(/::ffff:(\d{1,3}).(\d{1,3}).(\d{1,3}).(\d{1,3})/, `@@ffff@$1.$2.$3.$4`)
+
   // 布林檢查
   str = str.replace(/([a-zA-Z0-9-]+):(true)/g, '"$1":true')
   str = str.replace(/([a-zA-Z0-9-]+):(false)/g, '"$1":false')
@@ -32,6 +36,9 @@ function fix_json(str) {
   str = str.replace(/([a-zA-Z0-9-]+):([0-9-]+),/g, '"$1":$2,')
   str = str.replace(/([a-zA-Z0-9-]+):([a-zA-Z0-9-]+),/g, '"$1":"$2",')
   str = str.replace(/([a-zA-Z0-9-]+):/g, '"$1":')
+
+  // 還原 IP 格式
+  str = str.replace(/@@ffff@(\d{1,3}).(\d{1,3}).(\d{1,3}).(\d{1,3})/, `"::ffff:$1.$2.$3.$4"`)
 
   // 還原時間格式
   str = str.replace(/(\d{4})-(\d{1,2})-(\d{1,2})T(\d{1,2})@(\d{1,2})@(\d{1,2}).(\d{3})Z/, `"$1-$2-$3T$4:$5:$6.$7Z"`)
