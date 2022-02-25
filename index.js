@@ -37,8 +37,11 @@ Example:
   .option("-b | --sha1 <str>", normalColor("sha1 密碼不可逆加密 ") + warnColor("(-b str)"))
   .option("-c | --rsa_create <dc>", successColor("產生指定 dc 的 RSA public/private key 檔案") + warnColor("(-c dc)"))
   .option("-d | --no-non_debug", normalColor("是否不顯示 debug 資訊")) // --no- 開頭會預設 non_debug 為 true
-  .option("-e | --rsa_encrypt <decryptString>", successColor("RSA 解密加密字串，須配合 private.pem") + warnColor("(-e str)"))
-  .option("-f | --ff <n>", errorColor("預留"))
+  .option(
+    "-e | --rsa_encrypt <decryptString>",
+    successColor("RSA 解密加密字串，須配合 private.pem") + warnColor("(-e str)")
+  )
+  .option("-f | --denom <list>", errorColor("將面額字串陣列轉成數值陣列") + warnColor("(-f list)"))
   .option("-g | --gg <n>", errorColor("預留")) // -h 預設為說明
   .option("-i | --ii <n>", errorColor("預留"))
   .option("-j | --fix_json <str>", successColor("格式化 json 字串 ") + warnColor("(-j str)"))
@@ -52,11 +55,14 @@ Example:
   .option("-r, --strings <strings...>", "多個字串參數")
   .option("-s | --dcsetting_common <dc>", successColor("新增通用型單錢包的 dc_setting ") + warnColor("(-s dc)"))
   .option("-t | --url_token <token>", normalColor("使用 token 產生網址 ") + warnColor("(-t token)"))
-  .option("-u | --dcsetting_update_endpoint <dc...>", successColor("更新 dc_setting 的 endpoint ") + warnColor("(-u dc https)")) // -v 預設為顯示版本號
+  .option(
+    "-u | --dcsetting_update_endpoint <dc...>",
+    successColor("更新 dc_setting 的 endpoint ") + warnColor("(-u dc https)")
+  ) // -v 預設為顯示版本號
   .option("-w | --ww <n>", errorColor("預留"))
   .option("-x | --xx <n>", errorColor("預留"))
   .option("-y | --yy <n>", errorColor("預留"))
-  .option("-z | --zz <n>", errorColor("預留"))  
+  .option("-z | --zz <n>", errorColor("預留"))
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
   .configureOutput({
     // 此處使輸出變得容易區分
@@ -71,7 +77,7 @@ const opts = program.opts()
 const keys = Object.keys(opts).length
 if (keys <= 2) {
   console.log(clc.blue("請輸入參數，或輸入") + clc.red(" lr -h ") + clc.blue("查詢使用說明。"))
-  return
+  process.exit(1)
 }
 
 console.log(
@@ -91,6 +97,50 @@ if (!opts.non_debug) {
       console.log(`command type: ${key} ${program.getOptionValue(key)}`) // 一個一行印
     }
   }
+}
+
+/**
+ * 將面額字串陣列轉成數值陣列
+ */
+if (opts.denom) {
+  const map = new Map([
+    [1, "100000:1"],
+    [2, "50000:1"],
+    [3, "10000:1"],
+    [4, "5000:01:00"],
+    [5, "2000:01:00"],
+    [6, "1000:01:00"],
+    [7, "500:01:00"],
+    [8, "200:01:00"],
+    [9, "100:01:00"],
+    [10, "50:01:00"],
+    [11, "20:01"],
+    [12, "10:01"],
+    [13, "05:01"],
+    [14, "02:01"],
+    [15, "01:01"],
+    [16, "01:02"],
+    [17, "01:05"],
+    [18, "01:10"],
+    [19, "01:20"],
+    [20, "01:50"],
+    [21, "0.111111111"],
+    [22, "0.180555556"],
+    [23, "0.388888889"],
+    [24, "0.736111111"],
+    [25, "1.430555556"],
+    [26, "3.513888889"],
+    [27, "1:10000"],
+    [28, "1:50000"],
+    [29, "1:100000"],
+  ])
+  const str = program.getOptionValue("denom")
+  const arr = str.split(",")
+  const strNew = arr.map((x) => {
+    return x
+  })
+
+  console.log("面額索引陣列: " + clc.yellow(strNew))
 }
 
 /**
@@ -116,7 +166,6 @@ if (opts.sha1) {
  */
 if (opts.ase) {
   const data = program.getOptionValue("ase")
-
 
   const mode = "aes-128-cbc"
 
@@ -170,7 +219,7 @@ if (opts.rsa_encrypt) {
   // Load private key by dc
   if (!fs.existsSync("private.pem")) {
     console.error(`\n RSA 解密失敗，找不到 private.pem`)
-    return
+    process.exit(1)
   }
   const privateKey = fs.readFileSync("private.pem", { encoding: "utf8" }) // private.pem 目前是 FATCAT
   console.log(`privateKey = \n${privateKey}`)
