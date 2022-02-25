@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
 const { inspect } = require("util")
-
 const crypto = require("crypto")
+const fs = require("fs")
+var clc = require("cli-color")
+const program = require("commander")
 
 const rsa = require("./rsa/rsa")
 const { dc_setting_common } = require("./template/dc_setting_common")
@@ -12,12 +14,7 @@ const { errorColor, warnColor, successColor, normalColor } = require("./color/co
 
 const { url_token } = require("./commander/url_token")
 const { fix_json } = require("./commander/fix_json")
-
-const fs = require("fs")
-
-var clc = require("cli-color")
-
-const program = require("commander")
+const { denomIndexArray } = require("./commander/denomIndexArray")
 
 const package = require("./package.json")
 
@@ -103,44 +100,8 @@ if (!opts.non_debug) {
  * 將面額字串陣列轉成數值陣列
  */
 if (opts.denom) {
-  const map = new Map([
-    [1, "100000:1"],
-    [2, "50000:1"],
-    [3, "10000:1"],
-    [4, "5000:01:00"],
-    [5, "2000:01:00"],
-    [6, "1000:01:00"],
-    [7, "500:01:00"],
-    [8, "200:01:00"],
-    [9, "100:01:00"],
-    [10, "50:01:00"],
-    [11, "20:01"],
-    [12, "10:01"],
-    [13, "05:01"],
-    [14, "02:01"],
-    [15, "01:01"],
-    [16, "01:02"],
-    [17, "01:05"],
-    [18, "01:10"],
-    [19, "01:20"],
-    [20, "01:50"],
-    [21, "0.111111111"],
-    [22, "0.180555556"],
-    [23, "0.388888889"],
-    [24, "0.736111111"],
-    [25, "1.430555556"],
-    [26, "3.513888889"],
-    [27, "1:10000"],
-    [28, "1:50000"],
-    [29, "1:100000"],
-  ])
   const str = program.getOptionValue("denom")
-  const arr = str.split(",")
-  const strNew = arr.map((x) => {
-    return x
-  })
-
-  console.log("面額索引陣列: " + clc.yellow(strNew))
+  denomIndexArray(str)
 }
 
 /**
