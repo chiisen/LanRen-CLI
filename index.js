@@ -55,7 +55,8 @@ Example:
   .option(
     "-u | --dcsetting_update_endpoint <dc...>",
     successColor("更新 dc_setting 的 endpoint ") + warnColor("(-u dc https)")
-  ) // -v 預設為顯示版本號
+  )
+  .option("-v | --ver", errorColor("客製化的版本訊息"))// -V(大寫V) 預設為顯示版本號，小寫可使用
   .option("-w | --ww <n>", errorColor("預留"))
   .option("-x | --xx <n>", errorColor("預留"))
   .option("-y | --yy <n>", errorColor("預留"))
@@ -96,6 +97,21 @@ if (!opts.non_debug) {
   }
 }
 
+/**
+ * 客製化的版本訊息
+ */
+if (opts.ver) {
+  console.log(clc.blue("########################"))
+  console.log(clc.blue("# ") + clc.magenta("專案名稱: ") + clc.red(package.name) + clc.blue(" #"))
+  console.log(clc.blue("# ") + clc.magenta("目前版本: ") + clc.red(package.version) + clc.blue("      #"))
+  console.log(clc.blue("########################"))
+  console.log(clc.magenta("專案說明: ") + clc.red(package.description))
+  console.log(clc.magenta("author: ") + clc.red(package.author))
+  console.log(clc.magenta("repository: ") + clc.red(inspect(package.repository)))
+  console.log(clc.magenta("license: ") + clc.red(package.license))
+  console.log(clc.magenta("dependencies: ") + clc.red(inspect(package.dependencies)))
+  console.log(clc.magenta("keywords: ") + clc.red(package.keywords))
+}
 /**
  * 將面額字串陣列轉成數值陣列
  */

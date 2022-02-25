@@ -1,6 +1,6 @@
 {
   "name": "lanren-cli",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "Lan(懶)Ren(人) CLI",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com-chiisen:chiisen/LanRen-CLI.git"
+    "url": "git@github.com:chiisen/LanRen-CLI.git"
   },
   "author": "sam",
   "license": "ISC",
