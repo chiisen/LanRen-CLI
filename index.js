@@ -14,7 +14,7 @@ const { errorColor, warnColor, successColor, normalColor } = require("./color/co
 
 const { url_token } = require("./commander/url_token")
 const { fix_json } = require("./commander/fix_json")
-const { denomIndexArray } = require("./commander/denomIndexArray")
+const { denomIndexArray, denomArray } = require("./commander/denomIndexArray")
 
 const package = require("./package.json")
 
@@ -38,8 +38,8 @@ Example:
     "-e | --rsa_encrypt <decryptString>",
     successColor("RSA 解密加密字串，須配合 private.pem") + warnColor("(-e str)")
   )
-  .option("-f | --denom <list>", errorColor("將面額字串陣列轉成數值陣列") + warnColor("(-f list)"))
-  .option("-g | --gg <n>", errorColor("預留")) // -h 預設為說明
+  .option("-f | --denom <list>", normalColor("將面額字串陣列轉成數值陣列") + errorColor("(請先去掉雙引號)") + warnColor("(-f list)"))
+  .option("-g | --denomNum <list>", successColor("將面額數值陣列轉成字串陣列")+ errorColor("(雙引號可用空白取代)") + warnColor("(-g list)")) // g 的下個字母 -h 預設為說明
   .option("-i | --ii <n>", errorColor("預留"))
   .option("-j | --fix_json <str>", successColor("格式化 json 字串 ") + warnColor("(-j str)"))
   .option("-k | --kk <n>", errorColor("預留"))
@@ -56,7 +56,7 @@ Example:
     "-u | --dcsetting_update_endpoint <dc...>",
     successColor("更新 dc_setting 的 endpoint ") + warnColor("(-u dc https)")
   )
-  .option("-v | --ver", errorColor("客製化的版本訊息"))// -V(大寫V) 預設為顯示版本號，小寫可使用
+  .option("-v | --ver", normalColor("客製化的版本訊息")) // -V(大寫V) 預設為顯示版本號，小寫可使用
   .option("-w | --ww <n>", errorColor("預留"))
   .option("-x | --xx <n>", errorColor("預留"))
   .option("-y | --yy <n>", errorColor("預留"))
@@ -118,6 +118,14 @@ if (opts.ver) {
 if (opts.denom) {
   const str = program.getOptionValue("denom")
   denomIndexArray(str)
+}
+
+/**
+ * 將面額數值陣列轉成字串陣列
+ */
+if (opts.denomNum) {
+  const str = program.getOptionValue("denomNum")
+  denomArray(str)
 }
 
 /**
