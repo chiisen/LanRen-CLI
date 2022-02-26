@@ -184,12 +184,15 @@ lr -a str
 ```
 
 # npm 版本發佈
-首次登入 npm
+* 首次登入 npm
 ```
 npm login
 ```
-發佈 npm
+![](https://i.imgur.com/ncvwdmS.png)
+
+* 發佈 npm
 修改 package.json 的 version 後
 ```
 npm publish
 ```
+![npm publish](https://i.imgur.com/QDYx7NG.png)
