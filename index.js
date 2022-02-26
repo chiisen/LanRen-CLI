@@ -3,8 +3,9 @@
 const { inspect } = require("util")
 const crypto = require("crypto")
 const fs = require("fs")
-var clc = require("cli-color")
+const clc = require("cli-color")
 const program = require("commander")
+const shell = require("shelljs")
 
 const rsa = require("./rsa/rsa")
 const { dc_setting_common } = require("./template/dc_setting_common")
@@ -38,8 +39,14 @@ Example:
     "-e | --rsa_encrypt <decryptString>",
     successColor("RSA 解密加密字串，須配合 private.pem") + warnColor("(-e str)")
   )
-  .option("-f | --denom <list>", normalColor("將面額字串陣列轉成數值陣列") + errorColor("(請先去掉雙引號)") + warnColor("(-f list)"))
-  .option("-g | --denomNum <list>", successColor("將面額數值陣列轉成字串陣列")+ errorColor("(雙引號可用空白取代)") + warnColor("(-g list)")) // g 的下個字母 -h 預設為說明
+  .option(
+    "-f | --denom <list>",
+    normalColor("將面額字串陣列轉成數值陣列") + errorColor("(請先去掉雙引號)") + warnColor("(-f list)")
+  )
+  .option(
+    "-g | --denomNum <list>",
+    successColor("將面額數值陣列轉成字串陣列") + errorColor("(雙引號可用空白取代)") + warnColor("(-g list)")
+  ) // g 的下個字母 -h 預設為說明
   .option("-i | --ii <n>", errorColor("預留"))
   .option("-j | --fix_json <str>", successColor("格式化 json 字串 ") + warnColor("(-j str)"))
   .option("-k | --kk <n>", errorColor("預留"))
@@ -60,7 +67,7 @@ Example:
   .option("-w | --ww <n>", errorColor("預留"))
   .option("-x | --xx <n>", errorColor("預留"))
   .option("-y | --yy <n>", errorColor("預留"))
-  .option("-z | --zz <n>", errorColor("預留"))
+  .option("-z | --list", normalColor("顯示 npm 全域安裝的所有套件"))
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
   .configureOutput({
     // 此處使輸出變得容易區分
@@ -95,6 +102,35 @@ if (!opts.non_debug) {
       console.log(`command type: ${key} ${program.getOptionValue(key)}`) // 一個一行印
     }
   }
+}
+
+/**
+ *
+ */
+if (opts.list) {
+  shell.echo(clc.cyan("shell 執行開始!"))
+  shell.echo(clc.red(`============================`))
+
+  // 檢查指令是否安裝
+  const cmd = "npm"
+  if (!shell.which(cmd)) {
+    shell.echo(`${errorColor("無法執行指令")}: ${warnColor(cmd)}`)
+    shell.exit(1)
+  }
+
+  // 同步執行外部指令
+  const extCmd = "npm list -g --depth=0"
+  shell.echo(`執行 "${warnColor(extCmd)}"`)
+  shell.echo(clc.blue(`============================`))
+  const code = shell.exec(extCmd).code  
+  shell.echo(clc.blue(`============================`))
+  shell.echo(`code= ${warnColor(code)}`)
+  shell.echo(clc.red(`============================`))
+  if (code !== 0) {
+    shell.echo(`${errorColor("執行結果發生錯誤")}: ${warnColor(extCmd)}`)
+    shell.exit(1)
+  }
+  shell.echo(clc.cyan("shell 執行結束!"))
 }
 
 /**

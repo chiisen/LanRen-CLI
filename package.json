@@ -1,6 +1,6 @@
 {
   "name": "lanren-cli",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "Lan(懶)Ren(人) CLI",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,8 @@
   "dependencies": {
     "cli-color": "^2.0.1",
     "commander": "^8.3.0",
-    "node-rsa": "^1.1.1"
+    "node-rsa": "^1.1.1",
+    "shelljs": "^0.8.5"
   },
   "keywords": [
     "cli",
