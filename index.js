@@ -6,6 +6,7 @@ const fs = require("fs")
 const clc = require("cli-color")
 const program = require("commander")
 const shell = require("shelljs")
+const fetch = require("node-fetch-retry")
 
 const rsa = require("./rsa/rsa")
 const { dc_setting_common } = require("./template/dc_setting_common")
@@ -66,7 +67,7 @@ Example:
   .option("-v | --ver", normalColor("客製化的版本訊息")) // -V(大寫V) 預設為顯示版本號，小寫可使用
   .option("-w | --ww <n>", errorColor("預留"))
   .option("-x | --xx <n>", errorColor("預留"))
-  .option("-y | --yy <n>", errorColor("預留"))
+  .option("-y | --fetch_retry <opts...>", successColor("fetch retry"))
   .option("-z | --list", normalColor("顯示 npm 全域安裝的所有套件"))
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
   .configureOutput({
@@ -105,6 +106,31 @@ if (!opts.non_debug) {
 }
 
 /**
+ * fetch retry
+ */
+if (opts.fetch_retry) {
+  const input = {...opts.fetch_retry}
+  const url = input[0]
+  const retry = input[1]
+
+  const opt = {
+    method: "GET",
+    retry,
+    callback: (retry) => {
+      console.log(`${url} Trying: ${retry}`)
+    },
+  }
+
+  const request = async () => {
+    const response = await fetch(url, opt)
+    console.log(response)
+  }
+
+  console.log(clc.cyan("fetch"))
+  request()
+}
+
+/**
  *
  */
 if (opts.list) {
@@ -122,7 +148,7 @@ if (opts.list) {
   const extCmd = "npm list -g --depth=0"
   shell.echo(`執行 "${warnColor(extCmd)}"`)
   shell.echo(clc.blue(`============================`))
-  const code = shell.exec(extCmd).code  
+  const code = shell.exec(extCmd).code
   shell.echo(clc.blue(`============================`))
   shell.echo(`code= ${warnColor(code)}`)
   shell.echo(clc.red(`============================`))
