@@ -1,7 +1,10 @@
 # LanRen-CLI
 Lan(懶)Ren(人) CLI
 
-![程式碼美圖](https://i.imgur.com/cAcoxOp.jpg)
+![logo](https://img.my-best.tw/press_component/images/c14b4ca9124f4e97dda730eab61dfa43.jpg?ixlib=rails-4.2.0&q=70&lossless=0&w=690&fit=max)
+
+[LanRen-CLI : npm 說明頁面連結](https://www.npmjs.com/package/lanren-cli)
+
 # 版本紀錄
 
 | 版本號 | 更新說明 |
