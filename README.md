@@ -12,35 +12,36 @@ Lan(懶)Ren(人) CLI
 * 1.1.6 新增時間格式判斷
 * 1.1.5 整理指令與調整順序，與改變說明字體顏色。
 
-# 安裝(全域)
+# 安裝
+安裝方式如下:
 ```
 npm install -g lanren-cli
 ```
-
-```
-npm list -g
-```
-或是
+安裝後，可以用下列指令查詢安裝過的套件:
 ```
 npm list -g --depth=0
 ```
-可以查詢安裝過的 package
 
 ![npm list](https://i.imgur.com/a56xdBl.png)
 
-# 原始程式碼連結安裝 LanRen-CLI
+# 原始程式碼連結安裝
 ```
 npm link
 ```
-這個指令將會幫助你把這個資料夾放進你的全域node module 中，這樣妳就不用部屬到 npm 上才能使用。
+這個指令將會幫助你把這個資料夾放進你的全域node module 中，
+這樣你就不用部署到 npm 上就能直接使用。
 
-# 原始程式碼連結解安裝 LanRen-CLI
+# 原始程式碼連結解安裝
 ```
 npm unlink LanRen-CLI
+```
 
-
+# 移除專案
+```
 npm rm --global LanRen-CLI
-
+```
+移除後可以用下面指令查詢安裝套件
+```
 npm ls --global LanRen-CLI
 ```
 
@@ -50,6 +51,13 @@ lr -V
 or
 lr --version
 ```
+大寫 -V 或 --version
+![version](https://i.imgur.com/0sou4Hj.png)
+```
+lr -v
+```
+小寫 -v
+![-v](https://i.imgur.com/4zHEXGx.png)
 
 # 查看說明
 ```
@@ -57,6 +65,7 @@ lr -h
 or
 lr --help
 ```
+![help](https://i.imgur.com/FRsCUGL.png)
 
 # -d 是否不顯示 debug 資訊(預設不顯示)
 ```
@@ -68,6 +77,12 @@ lr  -d
 ```
 lr  -d -o
 ```
+
+# -z 顯示 npm 全域安裝的所有套件
+```
+lr  -z
+```
+![顯示 npm 全域安裝的所有套件](https://i.imgur.com/Mu0Ufs6.png)
 
 # -f 將面額字串陣列轉成數值陣列
 ```
