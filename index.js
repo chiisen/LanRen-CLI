@@ -9,8 +9,11 @@ const shell = require("shelljs")
 const fetch = require("node-fetch-retry")
 
 const rsa = require("./rsa/rsa")
+
+// template
 const { dc_setting_common } = require("./template/dc_setting_common")
 const { dc_setting_update_endpoint } = require("./template/dc_setting_update_endpoint")
+const { add_denom } = require("./template/add_denom")
 
 const { errorColor, warnColor, successColor, normalColor } = require("./color/color")
 
@@ -48,7 +51,7 @@ Example:
     "-g | --denomNum <list>",
     successColor("將面額數值陣列轉成字串陣列") + errorColor("(雙引號可用空白取代)") + warnColor("(-g list)")
   ) // g 的下個字母 -h 預設為說明
-  .option("-i | --ii <n>", errorColor("預留"))
+  .option("-i | --add_denom <denom...>", normalColor("新增幣別"))
   .option("-j | --fix_json <str>", successColor("格式化 json 字串 ") + warnColor("(-j str)"))
   .option("-k | --kk <n>", errorColor("預留"))
   .option("-l | --ll <n>", errorColor("預留"))
@@ -106,10 +109,17 @@ if (!opts.non_debug) {
 }
 
 /**
+ * 新增幣別
+ */
+if (opts.add_denom) {
+  add_denom(opts.add_denom)
+}
+
+/**
  * fetch retry
  */
 if (opts.fetch_retry) {
-  const input = {...opts.fetch_retry}
+  const input = { ...opts.fetch_retry }
   const url = input[0]
   const retry = input[1]
 
@@ -131,7 +141,7 @@ if (opts.fetch_retry) {
 }
 
 /**
- *
+ * 顯示 npm 全域安裝的所有套件
  */
 if (opts.list) {
   shell.echo(clc.cyan("shell 執行開始!"))
