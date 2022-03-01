@@ -14,6 +14,7 @@ const rsa = require("./rsa/rsa")
 const { dc_setting_common } = require("./template/dc_setting_common")
 const { dc_setting_update_endpoint } = require("./template/dc_setting_update_endpoint")
 const { add_denom } = require("./template/add_denom")
+const { update_denom } = require("./template/update_denom")
 
 const { errorColor, warnColor, successColor, normalColor } = require("./color/color")
 
@@ -53,7 +54,7 @@ Example:
   ) // g 的下個字母 -h 預設為說明
   .option("-i | --add_denom <denom...>", normalColor("新增幣別"))
   .option("-j | --fix_json <str>", successColor("格式化 json 字串 ") + warnColor("(-j str)"))
-  .option("-k | --kk <n>", errorColor("預留"))
+  .option("-k | --update_denom <denom...>", normalColor("更新幣別面額"))
   .option("-l | --ll <n>", errorColor("預留"))
   .option("-m | --md5 <str>", successColor("md5 密碼不可逆加密 ") + warnColor("(-m str)"))
   .option("-n, --numbers <numbers...>", "多個數值參數")
@@ -109,9 +110,16 @@ if (!opts.non_debug) {
 }
 
 /**
+ * 更新幣別面額
+ */
+ if (opts.update_denom) {
+  update_denom(opts.update_denom)
+}
+
+/**
  * 新增幣別
  */
-if (opts.add_denom) {
+ if (opts.add_denom) {
   add_denom(opts.add_denom)
 }
 
