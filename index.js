@@ -131,13 +131,13 @@ if (opts.fetch_retry) {
     },
   }
 
-  const request = async () => {
+  const sync = async () => {
     const response = await fetch(url, opt)
     console.log(response)
   }
 
   console.log(clc.cyan("fetch"))
-  request()
+  sync()
 }
 
 /**
