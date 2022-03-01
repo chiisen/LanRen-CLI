@@ -11,13 +11,25 @@ const { warnColor, successColor } = require("../color/color")
  */
 function add_denom(opts) {
   const denom = opts[0]
-
-  if (!fs.existsSync("gameList.csv")) {
-    console.error(`\n 讀檔失敗，找不到 gameList.csv`)
+  if(denom == undefined)
+  {
+    console.error(`請輸入新增幣別`)
+    process.exit(1)
+  }
+  const denomCsv = `${denom}.csv`
+  const indexList = opts[1]
+  if(indexList == undefined)
+  {
+    console.error(`請輸入面額索引列表`)
     process.exit(1)
   }
 
-  fs.readFile(`./gameList.csv`, async (err, data) => {
+  if (!fs.existsSync(denomCsv)) {
+    console.error(`\n 讀檔失敗，找不到 ${denomCsv}`)
+    process.exit(1)
+  }
+
+  fs.readFile(`./${denomCsv}`, async (err, data) => {
     if (err) {
       console.error(err)
       process.exit(1)
@@ -26,7 +38,7 @@ function add_denom(opts) {
     console.log(clc.cyan("csv-parse start"))
 
     const csvData = []
-    fs.createReadStream(`./gameList.csv`)
+    fs.createReadStream(`./${denomCsv}`)
       .pipe(parse({ delimiter: ":" }))
       .on("data", function (csvrow) {
         //console.log(csvrow)
@@ -86,12 +98,12 @@ function add_denom(opts) {
           if (lineCount == csvData.length) {
             fs.appendFileSync(
               `${subPath}/alter.sql`,
-              `(${x},'{${denom}}',"26,25,24,23,22,21,20,19,18,17,16,15,14,13");` + nextLine
+              `(${x},'{${denom}}',"${indexList}");` + nextLine
             )
           } else {
             fs.appendFileSync(
               `${subPath}/alter.sql`,
-              `(${x},'{${denom}}',"26,25,24,23,22,21,20,19,18,17,16,15,14,13"),` + nextLine
+              `(${x},'${denom}',"${indexList}"),` + nextLine
             )
           }
         })
