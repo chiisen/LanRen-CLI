@@ -11,15 +11,13 @@ const { warnColor, successColor } = require("../color/color")
  */
 function add_denom(opts) {
   const denom = opts[0]
-  if(denom == undefined)
-  {
+  if (denom == undefined) {
     console.error(`請輸入新增幣別`)
     process.exit(1)
   }
-  const denomCsv = `${denom}.csv`
+  const denomCsv = `gameList.csv`
   const indexList = opts[1]
-  if(indexList == undefined)
-  {
+  if (indexList == undefined) {
     console.error(`請輸入面額索引列表`)
     process.exit(1)
   }
@@ -82,30 +80,19 @@ function add_denom(opts) {
         fs.writeFileSync(
           `${subPath}/alter.sql`,
           `INSERT INTO \`game\`.\`game_default_currency_denom\` (\`Currency\`,\`Denom\`) VALUES ('${denom}',"13,12,11,10,9,8,7,6,5,4")
-      ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);` + nextLine,
+ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);` +
+            nextLine +
+            nextLine,
           "utf8"
         )
 
-        fs.appendFileSync(
-          `${subPath}/alter.sql`,
-          `INSERT INTO \`game\`.\`game_currency_denom_setting\` (\`GameId\`, \`Currency\`, \`Denom\`) 
-    VALUES` + nextLine
-        )
-
-        let lineCount = 0
         csvData.map((x) => {
-          lineCount++
-          if (lineCount == csvData.length) {
-            fs.appendFileSync(
-              `${subPath}/alter.sql`,
-              `(${x},'{${denom}}',"${indexList}");` + nextLine
-            )
-          } else {
-            fs.appendFileSync(
-              `${subPath}/alter.sql`,
-              `(${x},'${denom}',"${indexList}"),` + nextLine
-            )
-          }
+          fs.appendFileSync(
+            `${subPath}/alter.sql`,
+            `INSERT INTO \`game\`.\`game_currency_denom_setting\` (\`GameId\`, \`Currency\`, \`Denom\`) 
+VALUES (${x},'${denom}',"${indexList}")
+ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);` + nextLine
+          )
         })
 
         console.log(successColor(`新增【遊戲幣別:`) + warnColor(`${denom}】完成!`))
