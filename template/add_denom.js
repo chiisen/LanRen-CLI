@@ -87,14 +87,27 @@ ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);` +
         )
 
         csvData.map((x) => {
+          
           fs.appendFileSync(
             `${subPath}/alter.sql`,
             `INSERT INTO \`game\`.\`game_currency_denom_setting\` (\`GameId\`, \`Currency\`, \`Denom\`) 
 VALUES (${x},'${denom}',"${indexList}")
-ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);` + nextLine
+ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);` +
+              nextLine +
+              nextLine
           )
         })
 
+        csvData.map((x) => {
+          fs.appendFileSync(
+            `${subPath}/alter.sql`,
+            `INSERT INTO game.game_denom_setting(Cid, GameId, Currency, Denom) 
+  VALUES('d25e8rPFyBO4','${x}', '${denom}' ,  '${indexList}'  ) 
+  ON DUPLICATE KEY UPDATE Denom = '${indexList}';` + nextLine
+          )
+        })
+
+        
         console.log(successColor(`新增【遊戲幣別:`) + warnColor(`${denom}】完成!`))
       })
   })
