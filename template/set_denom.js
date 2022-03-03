@@ -9,10 +9,10 @@ const { warnColor, successColor } = require("../color/color")
  *
  * @param {*} opts[0] denom
  */
-function add_denom(opts) {
+function set_denom(opts) {
   const denom = opts[0]
   if (denom == undefined) {
-    console.error(`請輸入新增幣別`)
+    console.error(`請輸入設定幣別`)
     process.exit(1)
   }
   const denomCsv = `gameList.csv`
@@ -49,7 +49,7 @@ function add_denom(opts) {
 
         console.log(clc.cyan("csv-parse end"))
 
-        const rootPath = `add_denom`
+        const rootPath = `set_denom`
         const path = `./${rootPath}`
         if (!fs.existsSync(path)) {
           fs.mkdirSync(path)
@@ -67,39 +67,24 @@ function add_denom(opts) {
           }
         } while (!fs.existsSync(subPath))
 
-        fs.writeFileSync(
-          `${subPath}/README.md`,
-          `請確定在後台有新增【遊戲幣別】與設定【匯率】
-      後台操作可以參考 http://jira.i8.games/confluence/pages/viewpage.action?pageId=27590719
-      
-      請 IT 執行 alter.sql`,
-          "utf8"
-        )
-
         const nextLine = "\r\n"
-        fs.writeFileSync(
-          `${subPath}/alter.sql`,
-          `INSERT INTO \`game\`.\`game_default_currency_denom\` (\`Currency\`,\`Denom\`) VALUES ('${denom}',"13,12,11,10,9,8,7,6,5,4")
-ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);` +
-            nextLine +
-            nextLine,
-          "utf8"
-        )
+
+        fs.writeFileSync(`${subPath}/alter.sql`, `-- 設定幣別` + nextLine + nextLine, "utf8")
 
         csvData.map((x) => {
           if (isNumeric(x)) {
             fs.appendFileSync(
               `${subPath}/alter.sql`,
-              `INSERT INTO \`game\`.\`game_currency_denom_setting\` (\`GameId\`, \`Currency\`, \`Denom\`) 
-  VALUES (${x},'${denom}',"${indexList}")
-  ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);` +
+              `INSERT INTO game.game_denom_setting(Cid, GameId, Currency, Denom) 
+          VALUES('d25e8rPFyBO4','${x}', '${denom}' ,  '${indexList}'  ) 
+          ON DUPLICATE KEY UPDATE Denom = '${indexList}';` +
                 nextLine +
                 nextLine
             )
           }
         })
 
-        console.log(successColor(`新增【遊戲幣別:`) + warnColor(`${denom}】完成!`))
+        console.log(successColor(`設定【遊戲幣別:`) + warnColor(`${denom}】完成!`))
       })
   })
 }
@@ -108,4 +93,4 @@ function isNumeric(value) {
   return /^-?\d+$/.test(value)
 }
 
-module.exports = { add_denom }
+module.exports = { set_denom }
