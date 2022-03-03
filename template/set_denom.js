@@ -22,6 +22,8 @@ function set_denom(opts) {
     process.exit(1)
   }
 
+  const defaultIndex = indexList.split(',')[0]
+
   const cId = opts[2]
 
   if (!fs.existsSync(denomCsv)) {
@@ -77,9 +79,9 @@ function set_denom(opts) {
           if (isNumeric(x)) {
             fs.appendFileSync(
               `${subPath}/alter.sql`,
-              `INSERT INTO game.game_denom_setting(Cid, GameId, Currency, Denom) 
-          VALUES('${cId}','${x}', '${denom}' ,  '${indexList}'  ) 
-          ON DUPLICATE KEY UPDATE Denom = '${indexList}';` +
+              `INSERT INTO game.game_denom_setting(Cid, GameId, Currency, Denom, DefaultDenomId) 
+          VALUES('${cId}','${x}', '${denom}',  '${indexList}', ${defaultIndex}  ) 
+          ON DUPLICATE KEY UPDATE Denom = '${indexList}', DefaultDenomId = '${defaultIndex}';` +
                 nextLine +
                 nextLine
             )
