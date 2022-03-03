@@ -22,6 +22,8 @@ function set_denom(opts) {
     process.exit(1)
   }
 
+  const cId = opts[2]
+
   if (!fs.existsSync(denomCsv)) {
     console.error(`\n 讀檔失敗，找不到 ${denomCsv}`)
     process.exit(1)
@@ -76,7 +78,7 @@ function set_denom(opts) {
             fs.appendFileSync(
               `${subPath}/alter.sql`,
               `INSERT INTO game.game_denom_setting(Cid, GameId, Currency, Denom) 
-          VALUES('d25e8rPFyBO4','${x}', '${denom}' ,  '${indexList}'  ) 
+          VALUES('${cId}','${x}', '${denom}' ,  '${indexList}'  ) 
           ON DUPLICATE KEY UPDATE Denom = '${indexList}';` +
                 nextLine +
                 nextLine
