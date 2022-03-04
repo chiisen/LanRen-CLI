@@ -2,6 +2,7 @@ var clc = require("cli-color")
 
 /**
  * 將面額字串陣列轉成數值陣列
+ * 
  * @param {*} str
  */
 function denomIndexArray(str) {
@@ -47,10 +48,12 @@ function denomIndexArray(str) {
   })
 
   console.log("面額索引陣列: " + clc.yellow(IdxArr))
+  return IdxArr
 }
 
 /**
  * 將面額數值陣列轉成字串陣列
+ * 
  * @param {*} str
  */
  function denomArray(str) {
@@ -97,6 +100,7 @@ function denomIndexArray(str) {
   })
 
   console.log("面額陣列: " + clc.yellow(IdxArr))
+  return IdxArr
 }
 
 module.exports = { denomIndexArray, denomArray }
