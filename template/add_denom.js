@@ -5,11 +5,11 @@ const { parse } = require("csv-parse")
 const { warnColor, successColor } = require("../color/color")
 
 /**
- * 讀取 allDenom.csv
+ * 讀取 denomListCsv.csv
  * @param {*} opts
  */
 function readcsv() {
-  const denomListCsv = `denomListCsv.csv`
+  const denomListCsv = `denomList.csv`
   if (!fs.existsSync(denomListCsv)) {
     console.error(`\n 讀檔失敗，找不到 ${denomListCsv}`)
     process.exit(1)
@@ -33,10 +33,15 @@ function readcsv() {
     }
   } while (!fs.existsSync(subPath))
 
-  console.log(subPath)
+  console.log("建立目錄: " + subPath)
 
   README(fs, subPath)
 
+  if (!fs.existsSync(`./${denomListCsv}`)) {
+    console.log("檔案不存在: " + `./${denomListCsv}`)
+  }
+
+  console.log("讀取檔案: " + `./${denomListCsv}`)
   fs.readFile(`./${denomListCsv}`, async (err, data) => {
     if (err) {
       console.error(err)
@@ -55,12 +60,10 @@ function readcsv() {
       .on("end", function () {
         //do something with csvData
         console.log(clc.cyan("csv-parse end"))
-
-        console.log(successColor(`新增多筆【遊戲幣別】完成!`))
       })
   })
 
-  console.error(clc.red(`readcsv`))
+  console.log(successColor(`新增多筆【遊戲幣別】完成!`))
 }
 
 /**
