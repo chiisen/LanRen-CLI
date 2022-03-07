@@ -56,7 +56,7 @@ Example:
   .option("-i | --add_denom <denom...>", normalColor("新增幣別"))
   .option("-j | --fix_json <str>", successColor("格式化 json 字串 ") + warnColor("(-j str)"))
   .option("-k | --update_denom <denom...>", normalColor("更新幣別面額"))
-  .option("-l | --set_denom <denom...>", successColor("設定幣別"))
+  .option("-l | --set_denom <denom...>", successColor("設定幣別") + warnColor("(-l denom)"))
   .option("-m | --md5 <str>", normalColor("md5 密碼不可逆加密 ") + warnColor("(-m str)"))
   .option("-n, --numbers <numbers...>", "多個數值參數")
   .option("-o | --option_type [option_type]", successColor("顯示參數內容的格式 [option_type]"), 0) // 可以不填 option_type ，預設為 0
