@@ -26,6 +26,9 @@ function fix_json(str) {
 
   //沒填資料的情況
   str = str.replace(/([a-zA-Z0-9-]+):,/g, '"$1":"",')
+  //資料為 null 的情況
+  str = str.replace(/([a-zA-Z0-9-]+):null,/g, '"$1":null,')
+  str = str.replace(/([a-zA-Z0-9-]+):NULL,/g, '"$1":NULL,')
 
   // 布林檢查
   str = str.replace(/([a-zA-Z0-9-]+):(true)/g, '"$1":true')
