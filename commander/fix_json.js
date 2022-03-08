@@ -24,11 +24,13 @@ function fix_json(str) {
   //::ffff:210.242.152.252
   str = str.replace(/::ffff:(\d{1,3}).(\d{1,3}).(\d{1,3}).(\d{1,3})/, `@@ffff@$1.$2.$3.$4`)
 
-  //沒填資料的情況
+  //沒填資料的情況 'currency:'
   str = str.replace(/([a-zA-Z0-9-]+):,/g, '"$1":"",')
-  //資料為 null 的情況
+  //資料為 null 的情況 'currency:null'
   str = str.replace(/([a-zA-Z0-9-]+):null,/g, '"$1":null,')
   str = str.replace(/([a-zA-Z0-9-]+):NULL,/g, '"$1":NULL,')
+  //最後一筆資料的情況 'currency:MYR}'
+  str = str.replace(/([a-zA-Z0-9-]+):([a-zA-Z0-9-]+)}/g, '"$1":"$2"}')
 
   // 布林檢查
   str = str.replace(/([a-zA-Z0-9-]+):(true)/g, '"$1":true')
