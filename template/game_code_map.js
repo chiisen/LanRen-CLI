@@ -76,24 +76,14 @@ function createGameCodeMap(denomListCsv, gameIdList) {
         
         2. del GAME_CODE_LIST`
 
-        writeReadme(subPath, insertReadme)
+      writeReadme(subPath, insertReadme)
 
       const insertData =
         `
   ------------------------------
   -- game.game_code_map
   ------------------------------
-  DROP TABLE IF EXISTS \`game\`.\`game_code_map\`;
-
-CREATE TABLE \`game\`.\`game_code_map\` (
-  \`id\` int(11) NOT NULL AUTO_INCREMENT,
-  \`dc\` varchar(12) NOT NULL,
-  \`gameId\` int(10) unsigned NOT NULL,
-  \`gameCode\` varchar(50) NOT NULL,
-  PRIMARY KEY (\`id\`) USING BTREE,
-  UNIQUE KEY \`dc_gameid\` (\`dc\`,\`gameId\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;` +
-        nextLine
+  TRUNCATE TABLE \`game\`.\`game_code_map\`;` + nextLine
       writeAlter(subPath, insertData)
 
       let insertText = `
