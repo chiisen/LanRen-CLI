@@ -71,7 +71,7 @@ Example:
     successColor("更新 dc_setting 的 endpoint ") + warnColor("(-u dc https)")
   )
   .option("-v | --ver", normalColor("客製化的版本訊息")) // -V(大寫V) 預設為顯示版本號，小寫可使用
-  .option("-w | --ww <n>", errorColor("預留"))
+  .option("-w | --excel", successColor("讀取 excel"))
   .option("-x | --xx <n>", errorColor("預留"))
   .option("-y | --fetch_retry <opts...>", successColor("fetch retry"))
   .option("-z | --list", normalColor("顯示 npm 全域安裝的所有套件"))
@@ -112,6 +112,36 @@ if (!opts.non_debug) {
 }
 
 /**
+ * excel
+ */
+if (opts.excel) {
+  // 引入 node-xlsx 模块
+  const xlsx = require("node-xlsx")
+
+  // excel文件类径
+  const excelFilePath = "./excel.xlsx"
+
+  //解析excel, 获取到所有sheets
+  const sheets = xlsx.parse(excelFilePath)
+
+  // 查看页面数
+  console.log(sheets.length)
+
+  // 打印页面信息..
+  const sheet = sheets[0]
+  console.log(sheet)
+
+  // 打印页面数据
+  console.log(sheet.data)
+
+  // 输出每行内容
+  sheet.data.forEach((row) => {
+    console.log(row)
+    // 数组格式, 根据不同的索引取数据
+  })
+}
+
+/**
  * 新增 game_code_map 資料
  */
 if (opts.game_code_map) {
@@ -121,7 +151,7 @@ if (opts.game_code_map) {
 /**
  * 更新幣別面額
  */
- if (opts.update_denom) {
+if (opts.update_denom) {
   update_denom(opts.update_denom)
 }
 

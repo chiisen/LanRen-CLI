@@ -21,6 +21,7 @@
     "csv-parse": "^5.0.4",
     "node-fetch-retry": "^2.0.0",
     "node-rsa": "^1.1.1",
+    "node-xlsx": "^0.21.0",
     "shelljs": "^0.8.5"
   },
   "keywords": [
