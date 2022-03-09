@@ -16,6 +16,7 @@ const { dc_setting_update_endpoint } = require("./template/dc_setting_update_end
 const { add_denom } = require("./template/add_denom")
 const { update_denom } = require("./template/update_denom")
 const { set_denom } = require("./template/set_denom")
+const { game_code_map } = require("./template/game_code_map")
 
 const { errorColor, warnColor, successColor, normalColor } = require("./color/color")
 
@@ -60,7 +61,7 @@ Example:
   .option("-m | --md5 <str>", normalColor("md5 密碼不可逆加密 ") + warnColor("(-m str)"))
   .option("-n, --numbers <numbers...>", "多個數值參數")
   .option("-o | --option_type [option_type]", successColor("顯示參數內容的格式 [option_type]"), 0) // 可以不填 option_type ，預設為 0
-  .option("-p | --pp <n>", errorColor("預留"))
+  .option("-p | --game_code_map", errorColor("新增 game_code_map 資料"))
   .option("-q | --qq <n>", errorColor("預留"))
   .option("-r, --strings <strings...>", "多個字串參數")
   .option("-s | --dcsetting_common <dc>", successColor("新增通用型單錢包的 dc_setting ") + warnColor("(-s dc)"))
@@ -111,9 +112,16 @@ if (!opts.non_debug) {
 }
 
 /**
+ * 新增 game_code_map 資料
+ */
+if (opts.game_code_map) {
+  game_code_map(opts.game_code_map)
+}
+
+/**
  * 更新幣別面額
  */
-if (opts.update_denom) {
+ if (opts.update_denom) {
   update_denom(opts.update_denom)
 }
 
@@ -153,6 +161,7 @@ if (opts.fetch_retry) {
   }
 
   console.log(clc.cyan("fetch"))
+
   sync()
 }
 

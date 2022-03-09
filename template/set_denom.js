@@ -2,16 +2,17 @@ const fs = require("fs")
 const clc = require("cli-color")
 const { parse } = require("csv-parse")
 
-const { writeAlter, appendAlter, writeReadme, createFolder } = require("../file/file")
+const { writeAlter, appendAlter, createFolder } = require("../file/file")
 const { denomIndexArray } = require("../commander/denomIndexArray")
 const { warnColor, successColor } = require("../color/color")
+const { isNumeric } = require("../tool")
 
 /**
  * 讀取 denomList.csv
  * @note csv 範例: BDT,5/1|10/1|20/1|50/1|100/1
  * ':' 置換為 '/' 與 ',' 置換為 '|'
  */
- function readcsv() {
+function readcsv() {
   const denomListCsv = `updateDenomList.csv`
   if (!fs.existsSync(denomListCsv)) {
     console.error(`\n 讀檔失敗，找不到 ${denomListCsv}`)
@@ -32,11 +33,9 @@ const { warnColor, successColor } = require("../color/color")
       //do something with csvrow
       if (isNumeric(csvrow)) {
         gameIdList.push(csvrow)
-        console.log(csvrow)
       } else {
         console.log(clc.red(csvrow) + " 不是數值")
       }
-      //console.log(csvrow)
     })
     .on("end", function () {
       //do something with csvData
@@ -49,7 +48,7 @@ const { warnColor, successColor } = require("../color/color")
 /**
  *
  */
- function createDenomList(denomListCsv, gameIdList) {
+function createDenomList(denomListCsv, gameIdList) {
   console.log("讀取檔案: " + clc.magenta(`./${denomListCsv}`))
 
   console.log(clc.cyan("csv-parse start"))
@@ -93,9 +92,9 @@ const { warnColor, successColor } = require("../color/color")
         nextLine +
         `
 ------------------------------
--- game_denom_setting
+-- game.game_denom_setting
 ------------------------------`
-      appendAlter(subPath, insertTitleCurrency)
+      writeAlter(subPath, insertTitleCurrency)
 
       denomAry.map((x) => {
         const denom = x.denom
@@ -141,7 +140,7 @@ function set_denom(opts) {
     process.exit(1)
   }
 
-  const defaultIndex = indexList.split(',')[0]
+  const defaultIndex = indexList.split(",")[0]
 
   const cId = opts[2]
 
@@ -210,10 +209,6 @@ function set_denom(opts) {
         console.log(successColor(`設定【遊戲幣別:`) + warnColor(`${denom}】完成!`))
       })
   })
-}
-
-function isNumeric(value) {
-  return /^-?\d+$/.test(value)
 }
 
 module.exports = { set_denom }

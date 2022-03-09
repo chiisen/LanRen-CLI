@@ -5,6 +5,7 @@ const { parse } = require("csv-parse")
 const { warnColor, successColor } = require("../color/color")
 const { writeAlter, appendAlter, writeReadme, createFolder } = require("../file/file")
 const { denomIndexArray } = require("../commander/denomIndexArray")
+const { isNumeric } = require("../tool")
 
 /**
  * 讀取 denomList.csv
@@ -32,7 +33,6 @@ function readcsv() {
       //do something with csvrow
       if (isNumeric(csvrow)) {
         gameIdList.push(csvrow)
-        console.log(csvrow)
       } else {
         console.log(clc.red(csvrow) + " 不是數值")
       }
@@ -183,7 +183,6 @@ function add_denom(opts) {
         //do something with csvrow
         if (isNumeric(csvrow)) {
           csvData.push(csvrow)
-          console.log(csvrow)
         } else {
           console.log(clc.red(csvrow) + " 不是數值")
         }
@@ -200,7 +199,7 @@ function add_denom(opts) {
         const insertText =
           `
 -----------------------------
--- game_default_currency_denom
+-- game.game_default_currency_denom
 ------------------------------
 INSERT INTO \`game\`.\`game_default_currency_denom\` (\`Currency\`,\`Denom\`) VALUES ('${denom}',"${indexList}")
 ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);` +
@@ -212,7 +211,7 @@ ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);` +
           subPath,
           `
 ------------------------------
--- game_currency_denom_setting
+-- game.game_currency_denom_setting
 ------------------------------`
         )
 
@@ -227,15 +226,6 @@ ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);`
         console.log(successColor(`新增【遊戲幣別:`) + warnColor(`${denom}】完成!`))
       })
   })
-}
-
-/**
- * 檢查是否為數值
- * @param {*} value
- * @returns
- */
-function isNumeric(value) {
-  return /^-?\d+$/.test(value)
 }
 
 module.exports = { add_denom }
