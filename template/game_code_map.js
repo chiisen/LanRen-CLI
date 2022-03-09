@@ -66,20 +66,53 @@ function createGameCodeMap(denomListCsv, gameIdList) {
 
       const nextLine = "\r\n"
 
+      const insertReadme = `
+      新增 game_code_map 資料
+        1. 執行 alter.sql
+        
+        清除redis cache
+        
+        1. select 3
+        
+        2. del GAME_CODE_LIST`
+
+        writeReadme(subPath, insertReadme)
+
       const insertData =
-        nextLine +
-        nextLine +
         `
   ------------------------------
   -- game.game_code_map
-  ------------------------------`
+  ------------------------------
+  DROP TABLE IF EXISTS \`game\`.\`game_code_map\`;
+
+CREATE TABLE \`game\`.\`game_code_map\` (
+  \`id\` int(11) NOT NULL AUTO_INCREMENT,
+  \`dc\` varchar(12) NOT NULL,
+  \`gameId\` int(10) unsigned NOT NULL,
+  \`gameCode\` varchar(50) NOT NULL,
+  PRIMARY KEY (\`id\`) USING BTREE,
+  UNIQUE KEY \`dc_gameid\` (\`dc\`,\`gameId\`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;` +
+        nextLine
       writeAlter(subPath, insertData)
 
+      let insertText = `
+  INSERT INTO \`game\`.\`game_code_map\` (\`id\`, \`dc\`, \`gameId\`, \`gameCode\`) `
+      appendAlter(subPath, insertText)
+
+      let count = 0
       csvData.map((x) => {
-        const insertText = `
-  INSERT INTO \`game\`.\`game_code_map\` (\`id\`, \`dc\`, \`gameId\`, \`gameCode\`) 
-  VALUES (${x.id},"${x.dc}",${x.gameId},"${x.gameCode}")
-  ON DUPLICATE KEY UPDATE gameId = ${x.gameId}, gameCode = "${x.gameCode}";`
+        count++
+        if (csvData.length == count) {
+          insertText = ` 
+    (${x.id},"${x.dc}",${x.gameId},"${x.gameCode}");`
+        } else if (count === 1) {
+          insertText = ` 
+    VALUES (${x.id},"${x.dc}",${x.gameId},"${x.gameCode}"),`
+        } else {
+          insertText = ` 
+    (${x.id},"${x.dc}",${x.gameId},"${x.gameCode}"),`
+        }
 
         appendAlter(subPath, insertText)
       })
