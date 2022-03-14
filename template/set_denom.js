@@ -1,6 +1,7 @@
 const fs = require("fs")
 const clc = require("cli-color")
 const { parse } = require("csv-parse")
+const xlsx = require("node-xlsx") // 引入 node-xlsx 模組
 
 const { writeAlter, appendAlter, createFolder } = require("../file/file")
 const { denomIndexArray } = require("../commander/denomIndexArray")
@@ -8,114 +9,110 @@ const { warnColor, successColor } = require("../color/color")
 const { isNumeric } = require("../tool")
 
 /**
- * 讀取 denomList.csv
- * @note csv 範例: BDT,5/1|10/1|20/1|50/1|100/1
- * ':' 置換為 '/' 與 ',' 置換為 '|'
+ * 讀取 updateDenomList.xlsx
+ * @note excel .xlsx 範例: BDT 5:1,10:1,20:1,50:1,100:1 cid
+ * ',' 置換為 '|'
  */
 function readcsv() {
-  const denomListCsv = `updateDenomList.csv`
-  if (!fs.existsSync(denomListCsv)) {
-    console.error(`\n 讀檔失敗，找不到 ${denomListCsv}`)
+  const updateDenomListXlsx = `updateDenomList.xlsx`
+  if (!fs.existsSync(updateDenomListXlsx)) {
+    console.error(`\n 讀檔失敗，找不到 ${updateDenomListXlsx}`)
     process.exit(1)
   }
-  const gameListCsv = `gameList.csv`
-  if (!fs.existsSync(gameListCsv)) {
-    console.error(`\n 讀檔失敗，找不到 ${gameListCsv}`)
+  const gameListXlsx = `gameList.xlsx`
+  if (!fs.existsSync(gameListXlsx)) {
+    console.error(`\n 讀檔失敗，找不到 ${gameListXlsx}`)
     process.exit(1)
   }
 
-  console.log(clc.cyan("csv-parse start(gameList)"))
+  console.log(clc.cyan("excel-parse start(gameList)"))
 
   const gameIdList = []
-  fs.createReadStream(`./${gameListCsv}`)
-    .pipe(parse({ delimiter: ":" }))
-    .on("data", function (csvrow) {
-      //do something with csvrow
-      if (isNumeric(csvrow)) {
-        gameIdList.push(csvrow)
-      } else {
-        console.log(clc.red(csvrow) + " 不是數值")
-      }
-    })
-    .on("end", function () {
-      //do something with csvData
-      console.log(clc.cyan("csv-parse end(gameList)"))
+  const sheets = xlsx.parse(gameListXlsx)
+  const sheet = sheets[0]
+  // 輸出每行內容
+  sheet.data.forEach((row) => {
+    //console.log(row)
+    // 陣列格式, 根據不同的索引取數據
+    if (isNumeric(row)) {
+      gameIdList.push(row)
+    } else {
+      console.log(clc.red(row) + " 不是數值")
+    }
+  })
 
-      createDenomList(denomListCsv, gameIdList)
-    })
+  console.log(clc.cyan("excel-parse end(gameList)"))
+
+  createUpdateDenomList(updateDenomListXlsx, gameIdList)
 }
 
 /**
  *
  */
-function createDenomList(denomListCsv, gameIdList) {
-  console.log("讀取檔案: " + clc.magenta(`./${denomListCsv}`))
+function createUpdateDenomList(updateDenomListXlsx, gameIdList) {
+  console.log("讀取檔案: " + clc.magenta(`./${updateDenomListXlsx}`))
 
-  console.log(clc.cyan("csv-parse start"))
+  console.log(clc.cyan("excel-parse start"))
 
   const csvData = []
-  fs.createReadStream(`./${denomListCsv}`)
-    .pipe(parse({ delimiter: ":" }))
-    .on("data", function (csvrow) {
-      //do something with csvrow
-      csvData.push(csvrow)
-      //console.log(csvrow)
-    })
-    .on("end", function () {
-      //do something with csvData
-      console.log(clc.cyan("csv-parse end"))
+  const sheets = xlsx.parse(updateDenomListXlsx)
+  const sheet = sheets[0]
+  // 輸出每行內容
+  sheet.data.forEach((row) => {
+    console.log(row)
+    // 陣列格式, 根據不同的索引取數據
+    csvData.push(row)
+  })
 
-      const subPath = createFolder(`set_denom`, "updateDenomList")
+  console.log(clc.cyan("excel-parse end"))
 
-      const nextLine = "\r\n"
+  const subPath = createFolder(`set_denom`, "updateDenomList")
 
-      const denomAry = []
-      csvData.map((x) => {
-        const strAry = x[0].split(",")
-        const denom = strAry[0]
-        let denomList = strAry[1]
-        denomList = denomList.replace(/\//g, ":")
-        denomList = denomList.replace(/\|/g, ",")
-        const indexList = denomIndexArray(denomList)
-        const cid = strAry[2]
-        const data = {
-          denom,
-          indexList,
-          cid,
-        }
-        denomAry.push(data)
-        console.log(denom)
-      })
+  const nextLine = "\r\n"
 
-      const insertTitleCurrency =
-        nextLine +
-        nextLine +
-        `
+  const denomAry = []
+  csvData.map((x) => {
+    const denom = x[0]
+    let denomList = x[1]
+    const indexList = denomIndexArray(denomList)
+    const cid = x[2]
+    const data = {
+      denom,
+      indexList,
+      cid,
+    }
+    denomAry.push(data)
+    console.log(denom)
+  })
+
+  const insertTitleCurrency =
+    nextLine +
+    nextLine +
+    `
 ------------------------------
 -- game.game_denom_setting
 ------------------------------`
-      writeAlter(subPath, insertTitleCurrency)
+  writeAlter(subPath, insertTitleCurrency)
 
-      denomAry.map((x) => {
-        const denom = x.denom
-        const indexList = x.indexList
-        const defaultIndex = indexList[0]
-        const cid = x.cid
+  denomAry.map((x) => {
+    const denom = x.denom
+    const indexList = x.indexList
+    const defaultIndex = indexList[0]
+    const cid = x.cid
 
-        gameIdList.map((g) => {
-          const insertText = `
+    gameIdList.map((g) => {
+      const insertText = `
 INSERT INTO \`game\`.\`game_denom_setting\` (\`Cid\`, \`GameId\`, \`Currency\`, \`Denom\`, \`DefaultDenomId\`) 
 VALUES ("${cid}",${g},'${denom}',"${indexList}",${defaultIndex})
 ON DUPLICATE KEY UPDATE Denom = '${indexList}', DefaultDenomId = ${defaultIndex};`
 
-          appendAlter(subPath, insertText)
-        })
-
-        appendAlter(subPath, nextLine)
-      })
-
-      console.log(successColor(`新增多筆【遊戲幣別】完成!`))
+      appendAlter(subPath, insertText)
     })
+
+    appendAlter(subPath, nextLine)
+  })
+
+  console.log(successColor(`新增多筆【遊戲幣別】完成!`))
 }
 
 /**

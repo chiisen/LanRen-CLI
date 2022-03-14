@@ -115,29 +115,32 @@ if (!opts.non_debug) {
  * excel
  */
 if (opts.excel) {
-  // 引入 node-xlsx 模块
+  // 引入 node-xlsx 模組
   const xlsx = require("node-xlsx")
 
-  // excel文件类径
+  // excel檔案類徑
   const excelFilePath = "./excel.xlsx"
-
-  //解析excel, 获取到所有sheets
+  if (!fs.existsSync(excelFilePath)) {
+    console.error(`\n 讀檔失敗，找不到 ${excelFilePath}`)
+    process.exit(1)
+  }
+  //解析excel, 獲取到所有sheets
   const sheets = xlsx.parse(excelFilePath)
 
-  // 查看页面数
+  // 檢視頁面數
   console.log(sheets.length)
 
-  // 打印页面信息..
+  // 列印頁面資訊..
   const sheet = sheets[0]
   console.log(sheet)
 
-  // 打印页面数据
+  // 列印頁面數據
   console.log(sheet.data)
 
-  // 输出每行内容
+  // 輸出每行內容
   sheet.data.forEach((row) => {
     console.log(row)
-    // 数组格式, 根据不同的索引取数据
+    // 陣列格式, 根據不同的索引取數據
   })
 }
 
