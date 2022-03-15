@@ -71,7 +71,7 @@ Example:
     successColor("更新 dc_setting 的 endpoint ") + warnColor("(-u dc https)")
   )
   .option("-v | --ver", normalColor("客製化的版本訊息")) // -V(大寫V) 預設為顯示版本號，小寫可使用
-  .option("-w | --excel", successColor("讀取 excel"))
+  .option("-w | --ww", errorColor("預留"))
   .option("-x | --xx <n>", errorColor("預留"))
   .option("-y | --fetch_retry <opts...>", successColor("fetch retry"))
   .option("-z | --list", normalColor("顯示 npm 全域安裝的所有套件"))
@@ -109,39 +109,6 @@ if (!opts.non_debug) {
       console.log(`command type: ${key} ${program.getOptionValue(key)}`) // 一個一行印
     }
   }
-}
-
-/**
- * excel
- */
-if (opts.excel) {
-  // 引入 node-xlsx 模組
-  const xlsx = require("node-xlsx")
-
-  // excel檔案類徑
-  const excelFilePath = "./excel.xlsx"
-  if (!fs.existsSync(excelFilePath)) {
-    console.error(`\n 讀檔失敗，找不到 ${excelFilePath}`)
-    process.exit(1)
-  }
-  //解析excel, 獲取到所有sheets
-  const sheets = xlsx.parse(excelFilePath)
-
-  // 檢視頁面數
-  console.log(sheets.length)
-
-  // 列印頁面資訊..
-  const sheet = sheets[0]
-  console.log(sheet)
-
-  // 列印頁面數據
-  console.log(sheet.data)
-
-  // 輸出每行內容
-  sheet.data.forEach((row) => {
-    console.log(row)
-    // 陣列格式, 根據不同的索引取數據
-  })
 }
 
 /**
