@@ -21,7 +21,7 @@ const { game_code_map } = require("./template/game_code_map")
 const { errorColor, warnColor, successColor, normalColor } = require("./color/color")
 
 const { url_token } = require("./commander/url_token")
-const { fix_json } = require("./commander/fix_json")
+const { fixJson } = require("./commander/fix_json")
 const { denomIndexArray, denomArray } = require("./commander/denomIndexArray")
 
 const package = require("./package.json")
@@ -350,5 +350,5 @@ if (opts.url_token) {
  * 格式化 json 字串
  */
 if (opts.fix_json) {
-  fix_json(program.getOptionValue("fix_json"))
+  fixJson(program.getOptionValue("fix_json"))
 }
