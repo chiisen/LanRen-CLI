@@ -54,14 +54,14 @@ Example:
     "-g | --denomNum <list>",
     successColor("將面額數值陣列轉成字串陣列") + errorColor("(雙引號可用空白取代)") + warnColor("(-g list)")
   ) // g 的下個字母 -h 預設為說明
-  .option("-i | --add_denom <denom...>", normalColor("新增幣別"))
+  .option("-i | --add_denom", normalColor("新增幣別 - 讀取 denomList.xlsx") + warnColor("(-i)"))
   .option("-j | --fix_json <str>", successColor("格式化 json 字串 ") + warnColor("(-j str)"))
   .option("-k | --update_denom <denom...>", normalColor("更新幣別面額"))
-  .option("-l | --set_denom <denom...>", successColor("設定幣別") + warnColor("(-l denom)"))
+  .option("-l | --set_denom", successColor("設定幣別 - 讀取 updateDenomList.xlsx") + warnColor("(-l)"))
   .option("-m | --md5 <str>", normalColor("md5 密碼不可逆加密 ") + warnColor("(-m str)"))
   .option("-n, --numbers <numbers...>", "多個數值參數")
   .option("-o | --option_type [option_type]", successColor("顯示參數內容的格式 [option_type]"), 0) // 可以不填 option_type ，預設為 0
-  .option("-p | --game_code_map", errorColor("新增 game_code_map 資料"))
+  .option("-p | --game_code_map", errorColor("新增 game_code_map 資料 - 讀取 gameCodeMap.xlsx"))
   .option("-q | --qq <n>", errorColor("預留"))
   .option("-r, --strings <strings...>", "多個字串參數")
   .option("-s | --dcsetting_common <dc>", successColor("新增通用型單錢包的 dc_setting ") + warnColor("(-s dc)"))

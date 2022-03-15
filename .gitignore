@@ -107,10 +107,6 @@ dist
 /dc_setting_common
 /dc_setting_update_endpoint
 /rsa_create
-/gameList.csv
-/updateDenomList.csv
 /set_denom
 /add_denom
-/denomList.csv
-/gameCodeMap.csv
 /game_code_map

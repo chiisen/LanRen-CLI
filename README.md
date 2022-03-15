@@ -5,22 +5,6 @@ Lan(懶)Ren(人) CLI
 
 [LanRen-CLI : npm 說明頁面連結](https://www.npmjs.com/package/lanren-cli)
 
-# 版本紀錄
-
-| 版本號 | 更新說明 |
-| -------- | -------- |
-| 1.1.18   | 新增幣別讀取csv設定檔案 |
-| 1.1.16   | 設定幣別 |
-| 1.1.15   | 更新幣別面額 |
-| 1.1.14   | 新增幣別 |
-| 1.1.11   | 顯示 npm 全域安裝的所有套件 |
-| 1.1.10 | 新增將面額數值陣列轉成字串陣列 |
-| 1.1.9 | 新增客製化版本訊息 |
-| 1.1.8 | 新增將面額字串陣列轉成數值陣列 |
-| 1.1.7 | 新增 IP 格式判斷 |
-| 1.1.6 | 新增時間格式判斷 |
-| 1.1.5 | 整理指令與調整順序，與改變說明字體顏色 |
-
 # 安裝
 安裝方式如下:
 ```
@@ -87,20 +71,21 @@ lr  -d
 lr  -d -o
 ```
 
-# -p 新增 game_code_map 資料
+# 新增 game_code_map 資料 - 讀取 gameCodeMap.xlsx
 ```
 lr  -p
 ```
-# 設定幣別
+# 設定幣別 - 讀取 updateDenomList.xlsx
 ```
-lr -l "LKR" "26,25,24,23,22,21,20,19,18,17,16,15,14,13" "d25e8rPFyBO4"
+lr -l
 ```
-# 新增幣別
-```
-lr -i "SAR" "1,2,3"
+![excel格式](https://i.imgur.com/yNbLo8B.png)
 
-lr -i readcsv
+# 新增幣別 - 讀取 denomList.xlsx
 ```
+lr -i
+```
+![excel格式](https://i.imgur.com/JTq7j6t.png)
 
 # 更新幣別面額
 ```

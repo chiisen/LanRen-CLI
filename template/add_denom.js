@@ -1,130 +1,93 @@
 const fs = require("fs")
 const clc = require("cli-color")
-const { parse } = require("csv-parse")
 
-const { warnColor, successColor } = require("../color/color")
+const { successColor } = require("../color/color")
 const { writeAlter, appendAlter, writeReadme, createFolder } = require("../file/file")
 const { denomIndexArray } = require("../commander/denomIndexArray")
-const { isNumeric } = require("../tool")
+const { getGameIdList } = require("./getGameIdList")
+const { getExcel } = require("./getExcel")
 
 /**
- * 讀取 denomList.csv
- * @note csv 範例: BDT,5/1|10/1|20/1|50/1|100/1
- * ':' 置換為 '/' 與 ',' 置換為 '|'
+ * 讀取 denomList.xlsx
  */
-function readcsv() {
-  const denomListCsv = `denomList.csv`
-  if (!fs.existsSync(denomListCsv)) {
-    console.error(`\n 讀檔失敗，找不到 ${denomListCsv}`)
+function readXlsx() {
+  const denomListXlsx = `denomList.xlsx`
+  if (!fs.existsSync(denomListXlsx)) {
+    console.error(`\n 讀檔失敗，找不到 ${denomListXlsx}`)
     process.exit(1)
   }
-  const gameListCsv = `gameList.csv`
-  if (!fs.existsSync(gameListCsv)) {
-    console.error(`\n 讀檔失敗，找不到 ${gameListCsv}`)
+  const gameIdListXlsx = `gameIdList.xlsx`
+  if (!fs.existsSync(gameIdListXlsx)) {
+    console.error(`\n 讀檔失敗，找不到 ${gameIdListXlsx}`)
     process.exit(1)
   }
 
-  console.log(clc.cyan("csv-parse start(gameList)"))
-
-  const gameIdList = []
-  fs.createReadStream(`./${gameListCsv}`)
-    .pipe(parse({ delimiter: ":" }))
-    .on("data", function (csvrow) {
-      //do something with csvrow
-      if (isNumeric(csvrow)) {
-        gameIdList.push(csvrow)
-      } else {
-        console.log(clc.red(csvrow) + " 不是數值")
-      }
-      //console.log(csvrow)
-    })
-    .on("end", function () {
-      //do something with csvData
-      console.log(clc.cyan("csv-parse end(gameList)"))
-
-      createDenomList(denomListCsv, gameIdList)
-    })
+  const gameIdList = getGameIdList(gameIdListXlsx)
+  createSql(denomListXlsx, gameIdList)
 }
 
 /**
- *
+ * 建立 SQL 腳本
  */
-function createDenomList(denomListCsv, gameIdList) {
-  console.log("讀取檔案: " + clc.magenta(`./${denomListCsv}`))
+function createSql(denomListXlsx, gameIdList) {
+  console.log("讀取檔案: " + clc.magenta(`./${denomListXlsx}`))
 
-  console.log(clc.cyan("csv-parse start"))
+  const denomListData = getExcel(denomListXlsx)
+  const subPath = createFolder(`add_denom`, "denomList")
+  Readme(subPath)
 
-  const csvData = []
-  fs.createReadStream(`./${denomListCsv}`)
-    .pipe(parse({ delimiter: ":" }))
-    .on("data", function (csvrow) {
-      //do something with csvrow
-      csvData.push(csvrow)
-      //console.log(csvrow)
-    })
-    .on("end", function () {
-      //do something with csvData
-      console.log(clc.cyan("csv-parse end"))
-
-      const subPath = createFolder(`add_denom`, "denomList")
-      Readme(subPath)
-
-      const nextLine = "\r\n"
-      const insertTitleDefault = `
+  const nextLine = "\r\n"
+  const insertTitleDefault = `
 ------------------------------
 -- game_default_currency_denom
 ------------------------------`
-      writeAlter(subPath, insertTitleDefault)
+  writeAlter(subPath, insertTitleDefault)
 
-      const denomAry = []
-      csvData.map((x) => {
-        const strAry = x[0].split(",")
-        const denom = strAry[0]
-        let denomList = strAry[1]
-        denomList = denomList.replace(/\//g, ":")
-        denomList = denomList.replace(/\|/g, ",")
-        const indexList = denomIndexArray(denomList)
-        const data = {
-          denom,
-          indexList,
-        }
-        denomAry.push(data)
-        console.log(denom)
+  const denomAry = []
+  denomListData.map((x) => {
+    const denom = x[0]
+    let denomList = x[1]
+    const indexList = denomIndexArray(denomList)
+    const data = {
+      denom,
+      indexList,
+    }
+    denomAry.push(data)
+    console.log(denom)
 
-        const insertText = `
+    const insertText = `
 INSERT INTO \`game\`.\`game_default_currency_denom\` (\`Currency\`,\`Denom\`) VALUES ('${denom}',"${indexList}")
 ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);`
 
-        appendAlter(subPath, insertText)
-      })
+    appendAlter(subPath, insertText)
+  })
 
-      const insertTitleCurrency =
-        nextLine +
-        nextLine +
-        `
+  const insertTitleCurrency =
+    nextLine +
+    nextLine +
+    `
 ------------------------------
 -- game_currency_denom_setting
 ------------------------------`
-      appendAlter(subPath, insertTitleCurrency)
+  appendAlter(subPath, insertTitleCurrency)
 
-      denomAry.map((x) => {
-        const denom = x.denom
-        const indexList = x.indexList
+  denomAry.map((x) => {
+    const denom = x.denom
+    const indexList = x.indexList
 
-        gameIdList.map((g) => {
-          const insertText = `
+    gameIdList.map((g) => {
+      const insertText = `
 INSERT INTO \`game\`.\`game_currency_denom_setting\` (\`GameId\`, \`Currency\`, \`Denom\`) 
 VALUES (${g},'${denom}',"${indexList}")
 ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);`
 
-          appendAlter(subPath, insertText)
-        })
-
-        appendAlter(subPath, nextLine)
-      })
-
-      console.log(successColor(`新增多筆【遊戲幣別】完成!`))
+      appendAlter(subPath, insertText)
     })
+
+    appendAlter(subPath, nextLine)
+  })
+
+  console.log(successColor(`新增多筆【遊戲幣別】完成!`))
 }
 
 /**
@@ -141,91 +104,13 @@ function Readme(subPath) {
 }
 
 /**
- * 新增幣別
+ * 新增幣別 - 讀取 denomList.xlsx
+ * -i
  *
  * @param {*} opts[0] denom
  */
-function add_denom(opts) {
-  const denom = opts[0]
-  if (denom === "readcsv") {
-    readcsv()
-    return //@note 由於是非同步處理，所以不能在執行完馬上呼叫 process.exit(1)
-  }
-  if (denom == undefined) {
-    console.error(`請輸入新增幣別`)
-    process.exit(1)
-  }
-  const gameListCsv = `gameList.csv`
-  const indexList = opts[1]
-  if (indexList == undefined) {
-    console.error(`請輸入面額索引列表`)
-    process.exit(1)
-  }
-
-  if (!fs.existsSync(gameListCsv)) {
-    console.error(`\n 讀檔失敗，找不到 ${gameListCsv}`)
-    process.exit(1)
-  }
-
-  console.log("讀取檔案: " + clc.magenta(`./${gameListCsv}`))
-  fs.readFile(`./${gameListCsv}`, async (err, data) => {
-    if (err) {
-      console.error(err)
-      process.exit(1)
-    }
-
-    console.log(clc.cyan("csv-parse start"))
-
-    const csvData = []
-    fs.createReadStream(`./${gameListCsv}`)
-      .pipe(parse({ delimiter: ":" }))
-      .on("data", function (csvrow) {
-        //do something with csvrow
-        if (isNumeric(csvrow)) {
-          csvData.push(csvrow)
-        } else {
-          console.log(clc.red(csvrow) + " 不是數值")
-        }
-      })
-      .on("end", function () {
-        //do something with csvData
-        console.log(clc.cyan("csv-parse end"))
-
-        const subPath = createFolder(`add_denom`, denom)
-
-        Readme(subPath)
-
-        const nextLine = "\r\n"
-        const insertText =
-          `
------------------------------
--- game.game_default_currency_denom
-------------------------------
-INSERT INTO \`game\`.\`game_default_currency_denom\` (\`Currency\`,\`Denom\`) VALUES ('${denom}',"${indexList}")
-ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);` +
-          nextLine +
-          nextLine
-        writeAlter(subPath, insertText)
-
-        appendAlter(
-          subPath,
-          `
-------------------------------
--- game.game_currency_denom_setting
-------------------------------`
-        )
-
-        csvData.map((x) => {
-          const insertText = `
-INSERT INTO \`game\`.\`game_currency_denom_setting\` (\`GameId\`, \`Currency\`, \`Denom\`) 
-VALUES (${x},'${denom}',"${indexList}")
-ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);`
-          appendAlter(subPath, insertText)
-        })
-
-        console.log(successColor(`新增【遊戲幣別:`) + warnColor(`${denom}】完成!`))
-      })
-  })
+function add_denom() {
+  readXlsx()
 }
 
 module.exports = { add_denom }
