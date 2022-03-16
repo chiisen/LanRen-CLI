@@ -71,6 +71,12 @@ lr  -d
 lr  -d -o
 ```
 
+# 設定 dc 幣別 - 讀取 updateDcDenomList.xlsx
+```
+lr  -q
+```
+![excel格式](https://i.imgur.com/If9GTrW.png)
+
 # 新增 game_code_map 資料 - 讀取 gameCodeMap.xlsx
 ```
 lr  -p

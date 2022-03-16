@@ -17,6 +17,7 @@ const { add_denom } = require("./template/add_denom")
 const { update_denom } = require("./template/update_denom")
 const { set_denom } = require("./template/set_denom")
 const { game_code_map } = require("./template/game_code_map")
+const { set_dc_denom } = require("./template/set_dc_denom")
 
 const { errorColor, warnColor, successColor, normalColor } = require("./color/color")
 
@@ -61,8 +62,8 @@ Example:
   .option("-m | --md5 <str>", normalColor("md5 密碼不可逆加密 ") + warnColor("(-m str)"))
   .option("-n, --numbers <numbers...>", "多個數值參數")
   .option("-o | --option_type [option_type]", successColor("顯示參數內容的格式 [option_type]"), 0) // 可以不填 option_type ，預設為 0
-  .option("-p | --game_code_map", errorColor("新增 game_code_map 資料 - 讀取 gameCodeMap.xlsx"))
-  .option("-q | --qq <n>", errorColor("預留"))
+  .option("-p | --game_code_map", normalColor("新增 game_code_map 資料 - 讀取 gameCodeMap.xlsx"))
+  .option("-q | --set_dc_denom", successColor("設定 dc 幣別 - 讀取 updateDcDenomList.xlsx") + warnColor("(-q)"))
   .option("-r, --strings <strings...>", "多個字串參數")
   .option("-s | --dcsetting_common <dc>", successColor("新增通用型單錢包的 dc_setting ") + warnColor("(-s dc)"))
   .option("-t | --url_token <token>", normalColor("使用 token 產生網址 ") + warnColor("(-t token)"))
@@ -112,10 +113,17 @@ if (!opts.non_debug) {
 }
 
 /**
+ * 設定 dc 幣別 - 讀取 updateDcDenomList.xlsx
+ */
+ if (opts.set_dc_denom) {
+  set_dc_denom()
+}
+
+/**
  * 新增 game_code_map 資料
  */
 if (opts.game_code_map) {
-  game_code_map(opts.game_code_map)
+  game_code_map()
 }
 
 /**
@@ -136,7 +144,7 @@ if (opts.add_denom) {
  * 設定幣別
  */
 if (opts.set_denom) {
-  set_denom(opts.set_denom)
+  set_denom()
 }
 
 /**
