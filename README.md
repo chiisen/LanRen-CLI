@@ -75,6 +75,8 @@ lr  -d -o
 ```
 lr  -p
 ```
+![excel格式](https://i.imgur.com/nLOg8G1.png)
+
 # 設定幣別 - 讀取 updateDenomList.xlsx
 ```
 lr -l
