@@ -1,6 +1,6 @@
 {
   "name": "lanren-cli",
-  "version": "1.1.20",
+  "version": "1.2.0",
   "description": "Lan(懶)Ren(人) CLI",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,7 @@
     "cli-color": "^2.0.1",
     "commander": "^8.3.0",
     "csv-parse": "^5.0.4",
+    "dayjs": "^1.11.0",
     "fix-json-format": "^1.0.0",
     "node-fetch-retry": "^2.0.0",
     "node-rsa": "^1.1.1",

@@ -322,7 +322,7 @@ if (opts.rsa_encrypt) {
  *  產生指定 dc 的 RSA public/private key 檔案與 sql script
  */
 if (opts.rsa_create) {
-  rsa.exportKey(`rsa_create`, program.getOptionValue("rsa_create"))
+  rsa.exportKey(`【產生指定 dc 的 RSA KEY】`, program.getOptionValue("rsa_create"))
 }
 
 /**

@@ -172,11 +172,15 @@ lr -e GcJm/aznlvdMCgL1cdKPMjELp0BnoFhWxtHZUvmH8DXSwac9P0PgeJg1W+RCtIuCbA6XdXdkQp
 ```
 lr -c dc
 ```
-.\rsa_create\dc\ 目錄內會有
-alter.sql
-private.pem
-public.pem
-這三個檔案
+.\【產生指定 dc 的 RSA KEY】\dc\ 目錄內會有
+.\YYYYMMDD\
+        alter.sql
+        README.md
+.\dc\
+    private.pem
+    public.pem
+這四個檔案
+![RSA KEY](https://i.imgur.com/zPeJG8I.png)
 
 ---
 
