@@ -28,17 +28,16 @@ const { denomIndexArray, denomArray } = require("./commander/denomIndexArray")
 const package = require("./package.json")
 
 program
-  .version(package.version)
-  .name(package.name) // 專案名稱
-  .usage("-[命令參數] '副參數1' '副參數2' ...") // 使用說明
-program
+  .version(clc.redBright("Version: " + package.version))
+  .name(clc.greenBright("Name: " + package.name)) // 專案名稱
+  .usage(clc.blueBright`-[命令參數] '副參數1' '副參數2' ...`) // 使用說明
   .addHelpText(
     "beforeAll",
-    `
+    clc.yellow`
 Example:
   $ lr -h`
   )
-  .description(package.description)
+  .description(clc.blueBright("Description: " + package.description))
   .option("-a | --ase <str>", successColor("ase 加解密 ") + warnColor("(-a str)"))
   .option("-b | --sha1 <str>", normalColor("sha1 密碼不可逆加密 ") + warnColor("(-b str)"))
   .option("-c | --rsa_create <dc>", successColor("產生指定 dc 的 RSA public/private key 檔案") + warnColor("(-c dc)"))
@@ -115,7 +114,7 @@ if (!opts.non_debug) {
 /**
  * 設定 dc 幣別 - 讀取 updateDcDenomList.xlsx
  */
- if (opts.set_dc_denom) {
+if (opts.set_dc_denom) {
   set_dc_denom()
 }
 
