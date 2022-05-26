@@ -168,11 +168,12 @@ lr -e GcJm/aznlvdMCgL1cdKPMjELp0BnoFhWxtHZUvmH8DXSwac9P0PgeJg1W+RCtIuCbA6XdXdkQp
 
 ---
 
-# -c 產生指定 dc 的 RSA public/private key 檔案
+# -c 產生指定 dc 的 RSA public/private key 檔案(一次產出UAT與PROD兩個環境的檔案)
 ```
 lr -c dc
 ```
-.\【產生指定 dc 的 RSA KEY】\dc\ 目錄內會有
+.\【產生指定 dc 的 RSA KEY - UAT】\dc\ 與
+.\【產生指定 dc 的 RSA KEY - PROD】\dc\ 目錄內會有
 .\YYYYMMDD\
         alter.sql
         README.md

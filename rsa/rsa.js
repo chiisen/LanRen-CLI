@@ -35,7 +35,7 @@ function encrypt(publicKey, x) {
  *
  * @returns 產出 RSA public/private key 與 sql script
  */
-function exportKey(folder, dc) {
+function exportKey(folder, dc, env) {
   const subPath = createFolder(folder, dc)
 
   const nowDate = dayjs(new Date()).format("YYYYMMDD")
@@ -43,7 +43,7 @@ function exportKey(folder, dc) {
   folderMk(dateFolder)
 
   const insertText = `
-[${dc}][UAT]新增 dc_rsa_key 資料
+[${dc}][${env}]新增 dc_rsa_key 資料
 1. 執行 alter.sql
 `
   writeReadme(dateFolder, insertText)
