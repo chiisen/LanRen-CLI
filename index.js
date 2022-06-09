@@ -14,6 +14,7 @@ const rsa = require("./rsa/rsa")
 const { dc_setting_common } = require("./template/dc_setting_common")
 const { dc_setting_update_endpoint } = require("./template/dc_setting_update_endpoint")
 const { add_denom } = require("./template/add_denom")
+const { add_hall_denom } = require("./template/add_hall_denom")
 const { update_denom } = require("./template/update_denom")
 const { set_denom } = require("./template/set_denom")
 const { game_code_map } = require("./template/game_code_map")
@@ -71,7 +72,7 @@ Example:
     successColor("更新 dc_setting 的 endpoint ") + warnColor("(-u dc https)")
   )
   .option("-v | --ver", normalColor("客製化的版本訊息")) // -V(大寫V) 預設為顯示版本號，小寫可使用
-  .option("-w | --ww", errorColor("預留"))
+  .option("-w | --add_hall_denom <currency>", successColor("指定幣別設定 HALL 遊戲面額 - 讀取 hallDenomList.xlsx") + warnColor("(-w)"))
   .option("-x | --xx <n>", errorColor("預留"))
   .option("-y | --fetch_retry <opts...>", successColor("fetch retry"))
   .option("-z | --list", normalColor("顯示 npm 全域安裝的所有套件"))
@@ -137,6 +138,13 @@ if (opts.update_denom) {
  */
 if (opts.add_denom) {
   add_denom(opts.add_denom)
+}
+
+/**
+ * 指定幣別設定 HALL 遊戲面額
+ */
+ if (opts.add_hall_denom) {
+  add_hall_denom(opts.add_hall_denom)
 }
 
 /**

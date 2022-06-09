@@ -119,6 +119,13 @@ lr -i
 
 ---
 
+# 指定幣別設定 HALL 遊戲面額設定 - 讀取 hallDenomList.xlsx
+```
+lr -w
+```
+
+---
+
 # 更新幣別面額
 ```
 lr -k "DOG" "1,2,3"
