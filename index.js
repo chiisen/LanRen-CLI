@@ -15,6 +15,7 @@ const { dc_setting_common } = require("./template/dc_setting_common")
 const { dc_setting_update_endpoint } = require("./template/dc_setting_update_endpoint")
 const { add_denom } = require("./template/add_denom")
 const { add_hall_denom } = require("./template/add_hall_denom")
+const { set_currency } = require("./template/set_currency")
 const { update_denom } = require("./template/update_denom")
 const { set_denom } = require("./template/set_denom")
 const { game_code_map } = require("./template/game_code_map")
@@ -67,13 +68,10 @@ Example:
   .option("-r, --strings <strings...>", "多個字串參數")
   .option("-s | --dcsetting_common <dc>", successColor("新增通用型單錢包的 dc_setting ") + warnColor("(-s dc)"))
   .option("-t | --url_token <token>", normalColor("使用 token 產生網址 ") + warnColor("(-t token)"))
-  .option(
-    "-u | --dcsetting_update_endpoint <dc...>",
-    successColor("更新 dc_setting 的 endpoint ") + warnColor("(-u dc https)")
-  )
+  .option("-u | --dcsetting_update_endpoint <dc...>", successColor("更新 dc_setting 的 endpoint ") + warnColor("(-u dc https)"))
   .option("-v | --ver", normalColor("客製化的版本訊息")) // -V(大寫V) 預設為顯示版本號，小寫可使用
   .option("-w | --add_hall_denom <currency>", successColor("指定幣別設定 HALL 遊戲面額 - 讀取 hallDenomList.xlsx") + warnColor("(-w)"))
-  .option("-x | --xx <n>", errorColor("預留"))
+  .option("-x | --set_currency", normalColor("設定預設幣別面額 - 讀取 game_default_currency_denom.xlsx") + warnColor("(-x)"))
   .option("-y | --fetch_retry <opts...>", successColor("fetch retry"))
   .option("-z | --list", normalColor("顯示 npm 全域安裝的所有套件"))
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
@@ -145,6 +143,13 @@ if (opts.add_denom) {
  */
  if (opts.add_hall_denom) {
   add_hall_denom(opts.add_hall_denom)
+}
+
+/**
+ * 指定幣別設定 HALL 遊戲面額
+ */
+ if (opts.set_currency) {
+  set_currency(opts.set_currency)
 }
 
 /**

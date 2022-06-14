@@ -126,6 +126,13 @@ lr -w
 
 ---
 
+# 設定預設幣別面額 - 讀取 game_default_currency_denom.xlsx
+```
+lr -x
+```
+
+---
+
 # 更新幣別面額
 ```
 lr -k "DOG" "1,2,3"
