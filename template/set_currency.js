@@ -1,9 +1,11 @@
 const fs = require("fs")
 const clc = require("cli-color")
 
-const { successColor } = require("../color/color")
+const { successColor, errorColor, warnColor } = require("../color/color")
 const { writeAlter, appendAlter, writeReadme, createFolder } = require("../file/file")
 const { getExcel } = require("./getExcel")
+const { csvToArray } = require("../tool")
+const { inspect } = require("util")
 
 /**
  * 讀取 game_default_currency_denom.xlsx
@@ -43,7 +45,15 @@ function createSql(gameDefaultCurrencyDenomXlsx) {
         denom,
       }
 
-      console.log(data)
+      const denomArray = csvToArray(denom.toString())
+      const arr = denomArray.filter(function (y) {
+        return y.toString() === "15"
+      })
+
+      if (!arr.length) {
+        console.log(errorColor(`【幣別】${currency} 沒有 1:1`))
+        console.log(warnColor(`${inspect(data)}`))
+      }
 
       const insertText =
         `
@@ -53,9 +63,9 @@ function createSql(gameDefaultCurrencyDenomXlsx) {
 
       appendAlter(subPath, insertText)
     }
-
-    console.log(successColor(`產生設定預設【幣別】面額腳本建立完成!`))
   })
+
+  console.log(successColor(`產生設定預設【幣別】面額腳本建立完成!`))
 }
 
 /**
