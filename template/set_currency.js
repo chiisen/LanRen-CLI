@@ -69,6 +69,8 @@ function createSql(gameDefaultCurrencyDenomXlsx) {
       if (!arr.length) {
         console.log(errorColor(`【幣別】${currency} 沒有 1:1`))
         console.log(warnColor(`${inspect(data)}`))
+
+        denom += ",15"
       }
 
       const insertText =
