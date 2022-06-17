@@ -58,7 +58,7 @@ function denomIndexArray(str, isLog) {
  *
  * @param {*} str
  */
-function denomArray(str) {
+function denomArray(str, isSort = false) {
   const denomMap = new Map([
     [1, "100000:1"],
     [2, "50000:1"],
@@ -91,7 +91,22 @@ function denomArray(str) {
     [29, "1:100000"],
   ])
 
-  const arr = str.split(",")
+  const srcArr = str.split(",")
+
+  let arr = {}
+  if(isSort)
+  {
+    console.log(srcArr)
+
+    arr = srcArr.sort()
+
+    console.log(arr)
+  }
+  else
+  {
+    arr = srcArr
+  }
+
   const IdxArr = arr.map((x) => {
     var n = Number(x)
     const ret = denomMap.get(n)
