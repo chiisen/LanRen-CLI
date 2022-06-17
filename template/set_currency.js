@@ -6,6 +6,7 @@ const { appendAlterByFileName, writeReadme, createFolder } = require("../file/fi
 const { getExcel } = require("./getExcel")
 const { csvToArray } = require("../tool")
 const { inspect } = require("util")
+const { denomArray } = require("../commander/denomIndexArray")
 
 const dayjs = require("dayjs")
 
@@ -61,14 +62,15 @@ function createSql(gameDefaultCurrencyDenomXlsx) {
         denom,
       }
 
-      const denomArray = csvToArray(denom.toString())
-      const arr = denomArray.filter(function (y) {
+      const denomArr = csvToArray(denom.toString())
+      const arr = denomArr.filter(function (y) {
         return y.toString() === "15"
       })
 
       if (!arr.length) {
         console.log(errorColor(`【幣別】${currency} 沒有 1:1`))
         console.log(warnColor(`${inspect(data)}`))
+        console.log(warnColor(`${denomArray(denom)}`))        
 
         denom += ",15"
       }
@@ -113,14 +115,15 @@ function createSql(gameDefaultCurrencyDenomXlsx) {
         denom,
       }
 
-      const denomArray = csvToArray(denom.toString())
-      const arr = denomArray.filter(function (y) {
+      const denomArr = csvToArray(denom.toString())
+      const arr = denomArr.filter(function (y) {
         return y.toString() === "15"
       })
 
       if (!arr.length) {
         console.log(errorColor(`【遊戲幣別】${currency} 沒有 1:1`))
         console.log(warnColor(`${inspect(data)}`))
+        console.log(warnColor(`${denomArray(denom)}`)) 
 
         denom += ",15"
       }
