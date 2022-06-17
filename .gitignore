@@ -110,3 +110,5 @@ dist
 /game_code_map
 /set_dc_denom
 /【產生指定 dc 的 RSA KEY】
+/set_currency
+/設定預設【遊戲幣別】面額

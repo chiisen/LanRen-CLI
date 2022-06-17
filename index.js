@@ -71,7 +71,7 @@ Example:
   .option("-u | --dcsetting_update_endpoint <dc...>", successColor("更新 dc_setting 的 endpoint ") + warnColor("(-u dc https)"))
   .option("-v | --ver", normalColor("客製化的版本訊息")) // -V(大寫V) 預設為顯示版本號，小寫可使用
   .option("-w | --add_hall_denom <currency>", successColor("指定幣別設定 HALL 遊戲面額 - 讀取 hallDenomList.xlsx") + warnColor("(-w)"))
-  .option("-x | --set_currency", normalColor("設定預設幣別面額 - 讀取 game_default_currency_denom.xlsx") + warnColor("(-x)"))
+  .option("-x | --set_currency", normalColor("設定預設幣別面額 - 讀取 game_default_currency_denom.xlsx、game_currency_denom_setting.xlsx (有gameId)") + warnColor("(-x)"))
   .option("-y | --fetch_retry <opts...>", successColor("fetch retry"))
   .option("-z | --list", normalColor("顯示 npm 全域安裝的所有套件"))
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息

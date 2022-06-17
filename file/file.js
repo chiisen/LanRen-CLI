@@ -12,13 +12,33 @@ function writeAlter(subPath, insertText) {
 }
 
 /**
+ * 寫入 alter.sql
+ *
+ * @param {*} subPath
+ * @param {*} insertText
+ */
+ function writeAlterByFileName(subPath, fileName, insertText) {
+  fs.writeFileSync(`${subPath}/${fileName}`, insertText, "utf8")
+}
+
+/**
  * 插入文字到 alter.sql
  *
  * @param {*} subPath
  * @param {*} insertText
  */
-function appendAlter(subPath, insertText) {
+ function appendAlter(subPath, insertText) {
   fs.appendFileSync(`${subPath}/alter.sql`, insertText, "utf8")
+}
+
+/**
+ * 插入文字到 alter.sql
+ *
+ * @param {*} subPath
+ * @param {*} insertText
+ */
+ function appendAlterByFileName(subPath, fileName,insertText) {
+  fs.appendFileSync(`${subPath}/${fileName}`, insertText, "utf8")
 }
 
 /**
@@ -66,4 +86,4 @@ function createFolder(mainFolder, subFolder) {
   return subNewPath
 }
 
-module.exports = { writeAlter, appendAlter, writeReadme, folderMk, createFolder }
+module.exports = { writeAlter, writeAlterByFileName, appendAlter, appendAlterByFileName, writeReadme, folderMk, createFolder }
