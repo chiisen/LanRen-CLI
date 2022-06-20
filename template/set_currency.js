@@ -3,7 +3,7 @@ const clc = require("cli-color")
 
 const { successColor, errorColor, warnColor } = require("../color/color")
 const { appendAlterByFileName, writeReadme, createFolder } = require("../file/file")
-const { getExcel } = require("./getExcel")
+const { getExcel, writeSinglePageExcel, writeMultiplePagesExcel } = require("./getExcel")
 const { csvToArray } = require("../tool")
 const { inspect } = require("util")
 const { denomArray } = require("../commander/denomIndexArray")
@@ -26,7 +26,7 @@ function readXlsx() {
 /**
  * 讀取 game_currency_denom_setting.xlsx (有gameId)
  */
- function readGameIdXlsx() {
+function readGameIdXlsx() {
   const gameCurrencyDenomSettingXlsx = `game_currency_denom_setting.xlsx`
   if (!fs.existsSync(gameCurrencyDenomSettingXlsx)) {
     console.error(`\n 讀檔失敗，找不到 ${gameCurrencyDenomSettingXlsx}`)
@@ -52,6 +52,8 @@ function createSql(gameDefaultCurrencyDenomXlsx) {
 
   const nextLine = "\r\n"
 
+  const excelDenomOutput = []
+  const excelDenomIndexOutput = []
   denomListData.map((x) => {
     const currency = x[0]
     let denom = x[1]
@@ -70,7 +72,7 @@ function createSql(gameDefaultCurrencyDenomXlsx) {
       if (!arr.length) {
         console.log(errorColor(`【幣別】${currency} 沒有 1:1`))
         console.log(warnColor(`${inspect(data)}`))
-        console.log(warnColor(`${denomArray(denom)}`))        
+        console.log(warnColor(`${denomArray(denom)}`))
 
         denom += ",15"
       }
@@ -81,9 +83,32 @@ function createSql(gameDefaultCurrencyDenomXlsx) {
     VALUES ("${currency}","${denom}")
     ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);` + nextLine
 
-    appendAlterByFileName(subPath, "game_default_currency_denom.sql",insertText)
+      appendAlterByFileName(subPath, "game_default_currency_denom.sql", insertText)
+
+      excelDenomOutput.push([currency, ...denomArray(denom)])
+      excelDenomIndexOutput.push([currency, ...denomArr])
+    } else {
+      excelDenomOutput.push([currency, denom])
+      excelDenomIndexOutput.push([currency, denom])
     }
   })
+
+  writeSinglePageExcel("./DefaultCurrencyDenomSinglePage.xlsx", "【幣別】面額", excelDenomOutput)
+  writeSinglePageExcel("./DefaultCurrencyDenomIndexSinglePage.xlsx", "【幣別】面額索引", excelDenomIndexOutput)
+
+  const dataArray = [
+    {
+      name: "【幣別】面額",
+      data: excelDenomOutput,
+    },
+    {
+      name: "【幣別】面額索引",
+      data: excelDenomIndexOutput,
+    },
+  ]
+  //---
+
+  writeMultiplePagesExcel("./DefaultCurrencyDenomMultiplePages.xlsx", dataArray)
 
   console.log(successColor(`產生設定預設【遊戲幣別】面額腳本建立完成!`))
 }
@@ -91,7 +116,7 @@ function createSql(gameDefaultCurrencyDenomXlsx) {
 /**
  * 建立 SQL 腳本
  */
- function createGameIdSql(gameCurrencyDenomSettingXlsx) {
+function createGameIdSql(gameCurrencyDenomSettingXlsx) {
   console.log("讀取檔案: " + clc.magenta(`./${gameCurrencyDenomSettingXlsx}`))
 
   const denomListData = getExcel(gameCurrencyDenomSettingXlsx)
@@ -123,7 +148,7 @@ function createSql(gameDefaultCurrencyDenomXlsx) {
       if (!arr.length) {
         console.log(errorColor(`【遊戲幣別】${currency} 沒有 1:1`))
         console.log(warnColor(`${inspect(data)}`))
-        console.log(warnColor(`${denomArray(denom)}`)) 
+        console.log(warnColor(`${denomArray(denom)}`))
 
         denom += ",15"
       }
@@ -134,7 +159,7 @@ function createSql(gameDefaultCurrencyDenomXlsx) {
     VALUES ("${gameId}","${currency}","${denom}")
     ON DUPLICATE KEY UPDATE \`Denom\` = VALUES(\`Denom\`);` + nextLine
 
-      appendAlterByFileName(subPath, "game_currency_denom_setting.sql",insertText)
+      appendAlterByFileName(subPath, "game_currency_denom_setting.sql", insertText)
     }
   })
 

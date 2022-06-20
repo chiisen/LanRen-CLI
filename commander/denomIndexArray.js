@@ -91,7 +91,7 @@ function denomArray(str, isSort = false) {
     [29, "1:100000"],
   ])
 
-  const srcArr = str.split(",")
+  const srcArr = str.toString().split(",") // .toString() 修正某些情況，轉換出數值，造成例外
 
   let arr = {}
   if(isSort)

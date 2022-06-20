@@ -1,9 +1,10 @@
 const clc = require("cli-color")
 const xlsx = require("node-xlsx") // 引入 node-xlsx 模組
+const fs = require("fs")
 
 /**
- * 取得 getExcel
- * 
+ * 讀取 Excel
+ *
  * @param {string} excelXlsx
  */
 function getExcel(excelXlsx) {
@@ -22,4 +23,47 @@ function getExcel(excelXlsx) {
   return excel
 }
 
-module.exports = { getExcel }
+/**
+ * 寫入單頁 Excel 檔案
+ *
+ * @param {string} fileName
+ * @param {string} sheetName
+ * @param {object} dataArray -> 
+    const dataArray = [['name', 'age']]
+ */
+function writeSinglePageExcel(fileName, sheetName, dataArray) {
+  const buffer = xlsx.build([
+    {
+      name: sheetName,
+      data: dataArray,
+    },
+  ])
+
+  fs.writeFileSync(fileName, buffer, { flag: "w" }) // 如果文件存在，覆盖
+  console.log(clc.cyan(`${fileName} 寫入成功!`))
+}
+
+/**
+ * 寫入多頁 Excel 檔案
+ * 
+ * @param {string} fileName
+ * @param {object} dataArray -> 
+    const dataArray = [
+      {
+        name: "sheetName1",
+        data: [["name1", "age1"]],
+      },
+      {
+        name: "sheetName2",
+        data: [["name2", "age2"]],
+      },
+    ]
+ */
+function writeMultiplePagesExcel(fileName, dataArray) {
+  const buffer = xlsx.build(dataArray)
+
+  fs.writeFileSync(fileName, buffer, { flag: "w" }) // 如果文件存在，覆盖
+  console.log(clc.cyan(`${fileName} 寫入成功!`))
+}
+
+module.exports = { getExcel, writeSinglePageExcel, writeMultiplePagesExcel }

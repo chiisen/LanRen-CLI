@@ -112,3 +112,6 @@ dist
 /【產生指定 dc 的 RSA KEY】
 /set_currency
 /設定預設【遊戲幣別】面額
+/DefaultCurrencyDenomSinglePage.xlsx
+/DefaultCurrencyDenomMultiplePages.xlsx
+/DefaultCurrencyDenomIndexSinglePage.xlsx
