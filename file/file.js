@@ -86,4 +86,16 @@ function createFolder(mainFolder, subFolder) {
   return subNewPath
 }
 
-module.exports = { writeAlter, writeAlterByFileName, appendAlter, appendAlterByFileName, writeReadme, folderMk, createFolder }
+/**
+ * 回傳指定路徑的所有目錄名稱
+ *
+ */
+ function readDir(path) {
+  if (!fs.existsSync(path)) {
+    console.log("目錄: " + clc.magenta(path) + " 不存在")
+    return null
+  }
+  return fs.readdirSync(path)
+}
+
+module.exports = { writeAlter, writeAlterByFileName, appendAlter, appendAlterByFileName, writeReadme, folderMk, createFolder, readDir }

@@ -26,6 +26,7 @@ const { errorColor, warnColor, successColor, normalColor } = require("./color/co
 const { url_token } = require("./commander/url_token")
 const { fixJson } = require("./commander/fix_json")
 const { denomIndexArray, denomArray } = require("./commander/denomIndexArray")
+const { icon } = require("./commander/icon")
 
 const package = require("./package.json")
 
@@ -44,19 +45,11 @@ Example:
   .option("-b | --sha1 <str>", normalColor("sha1 密碼不可逆加密 ") + warnColor("(-b str)"))
   .option("-c | --rsa_create <dc>", successColor("產生指定 dc 的 RSA public/private key 檔案") + warnColor("(-c dc)"))
   .option("-d | --no-non_debug", normalColor("是否不顯示 debug 資訊")) // --no- 開頭會預設 non_debug 為 true
-  .option(
-    "-e | --rsa_encrypt <decryptString>",
-    successColor("RSA 解密加密字串，須配合 private.pem") + warnColor("(-e str)")
-  )
-  .option(
-    "-f | --denom <list>",
-    normalColor("將面額字串陣列轉成數值陣列") + errorColor("(請先去掉雙引號)") + warnColor("(-f list)")
-  )
-  .option(
-    "-g | --denomNum <list>",
-    successColor("將面額數值陣列轉成字串陣列") + errorColor("(雙引號可用空白取代)") + warnColor("(-g list)")
-  ) // g 的下個字母 -h 預設為說明
+  .option("-e | --rsa_encrypt <decryptString>", successColor("RSA 解密加密字串，須配合 private.pem") + warnColor("(-e str)"))
+  .option("-f | --denom <list>", normalColor("將面額字串陣列轉成數值陣列") + errorColor("(請先去掉雙引號)") + warnColor("(-f list)"))
+  .option("-g | --denomNum <list>", successColor("將面額數值陣列轉成字串陣列") + errorColor("(雙引號可用空白取代)") + warnColor("(-g list)")) // g 的下個字母 -h 預設為說明
   .option("-i | --add_denom", normalColor("新增幣別 - 讀取 denomList.xlsx") + warnColor("(-i)"))
+  .option("-ic | --icon", normalColor("複製 icon") + warnColor("(-ic)"))
   .option("-j | --fix_json <str>", successColor("格式化 json 字串 ") + warnColor("(-j str)"))
   .option("-k | --update_denom <denom...>", normalColor("更新幣別面額"))
   .option("-l | --set_denom", successColor("設定幣別 - 讀取 updateDenomList.xlsx") + warnColor("(-l)"))
@@ -108,6 +101,14 @@ if (!opts.non_debug) {
       console.log(`command type: ${key} ${program.getOptionValue(key)}`) // 一個一行印
     }
   }
+}
+
+/**
+ * 複製 icon
+ */
+ if (opts.icon) {
+
+  icon(opts.icon)
 }
 
 /**
