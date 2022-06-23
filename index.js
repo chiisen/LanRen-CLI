@@ -16,6 +16,7 @@ const { dc_setting_update_endpoint } = require("./template/dc_setting_update_end
 const { add_denom } = require("./template/add_denom")
 const { add_hall_denom } = require("./template/add_hall_denom")
 const { set_currency } = require("./template/set_currency")
+const { convert_hall_denom } = require("./template/convert_hall_denom")
 const { update_denom } = require("./template/update_denom")
 const { set_denom } = require("./template/set_denom")
 const { game_code_map } = require("./template/game_code_map")
@@ -72,6 +73,7 @@ Example:
   .option("-v | --ver", normalColor("客製化的版本訊息")) // -V(大寫V) 預設為顯示版本號，小寫可使用
   .option("-w | --add_hall_denom <currency>", successColor("指定幣別設定 HALL 遊戲面額 - 讀取 hallDenomList.xlsx") + warnColor("(-w)"))
   .option("-x | --set_currency", normalColor("設定預設幣別面額 - 讀取 game_default_currency_denom.xlsx、game_currency_denom_setting.xlsx (有gameId)") + warnColor("(-x)"))
+  .option("-xx | --convert_hall_denom <filePath>", normalColor("轉換HALL面額") + warnColor("(-xx)"))
   .option("-y | --fetch_retry <opts...>", successColor("fetch retry"))
   .option("-z | --list", normalColor("顯示 npm 全域安裝的所有套件"))
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
@@ -150,6 +152,10 @@ if (opts.add_denom) {
  */
  if (opts.set_currency) {
   set_currency(opts.set_currency)
+}
+
+if (opts.convert_hall_denom) {
+  convert_hall_denom(opts.convert_hall_denom)
 }
 
 /**
