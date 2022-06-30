@@ -90,9 +90,12 @@ function createFolder(mainFolder, subFolder) {
  * 回傳指定路徑的所有目錄名稱
  *
  */
- function readDir(path) {
+ function readDir(path, isShowLog = true) {
   if (!fs.existsSync(path)) {
-    console.log("目錄: " + clc.magenta(path) + " 不存在")
+    if(isShowLog)
+    {
+      console.log("目錄: " + clc.magenta(path) + " 不存在")
+    }
     return null
   }
   return fs.readdirSync(path)

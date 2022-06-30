@@ -49,7 +49,7 @@ Example:
   .option("-f | --denom <list>", normalColor("將面額字串陣列轉成數值陣列") + errorColor("(請先去掉雙引號)") + warnColor("(-f list)"))
   .option("-g | --denomNum <list>", successColor("將面額數值陣列轉成字串陣列") + errorColor("(雙引號可用空白取代)") + warnColor("(-g list)")) // g 的下個字母 -h 預設為說明
   .option("-i | --add_denom", normalColor("新增幣別 - 讀取 denomList.xlsx") + warnColor("(-i)"))
-  .option("-ic | --icon", normalColor("複製 icon") + warnColor("(-ic)"))
+  .option("-1 | --icon <typeList...> <langList...>", normalColor("複製 icon") + warnColor("(-1)"))
   .option("-j | --fix_json <str>", successColor("格式化 json 字串 ") + warnColor("(-j str)"))
   .option("-k | --update_denom <denom...>", normalColor("更新幣別面額"))
   .option("-l | --set_denom", successColor("設定幣別 - 讀取 updateDenomList.xlsx") + warnColor("(-l)"))
@@ -108,7 +108,8 @@ if (!opts.non_debug) {
  */
  if (opts.icon) {
 
-  icon(opts.icon)
+  const option = program.getOptionValue("icon")
+  icon(option[0], option[1], option[2])
 }
 
 /**
