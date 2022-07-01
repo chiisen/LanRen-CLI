@@ -3,13 +3,14 @@ const fs = require("fs")
 const clc = require("cli-color")
 const { getGameIdList } = require("../template/getGameIdList")
 const dayjs = require("dayjs")
+const zipFolder = require('folder-zip-sync')
 
 /**
  * 複製 icon
  *
  */
 function icon(typeList, sizeList, langList, isShowGameIdLog = false) {
-  const defaultPath = "C:/company/"
+  const defaultPath = "./"
   let enterPath = defaultPath + "Icon/"
   let files = readDir(enterPath)
   if (!files) {
@@ -116,6 +117,11 @@ function icon(typeList, sizeList, langList, isShowGameIdLog = false) {
       })
     }
   })
+
+  console.log(clc.magenta("==壓縮程式!=="))
+
+  const zipFile = `./icon_${nowDate}.zip`
+  zipFolder(newPath, zipFile)
 
   console.log(clc.magenta("==程式結束!=="))
 }
