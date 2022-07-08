@@ -13,7 +13,7 @@
             ],
             "program": "${workspaceFolder}\\index.js",
             "args": [
-                "-1","rectangle,rectangle_r","300_540,310_190","cn,en"
+                "-2"
             ],
             "console": "internalConsole"
         }

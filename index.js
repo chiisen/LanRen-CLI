@@ -7,6 +7,7 @@ const clc = require("cli-color")
 const program = require("commander")
 const shell = require("shelljs")
 const fetch = require("node-fetch-retry")
+const { writeAlterByFileName } = require("./file/file")
 
 const rsa = require("./rsa/rsa")
 
@@ -49,7 +50,6 @@ Example:
   .option("-f | --denom <list>", normalColor("將面額字串陣列轉成數值陣列") + errorColor("(請先去掉雙引號)") + warnColor("(-f list)"))
   .option("-g | --denomNum <list>", successColor("將面額數值陣列轉成字串陣列") + errorColor("(雙引號可用空白取代)") + warnColor("(-g list)")) // g 的下個字母 -h 預設為說明
   .option("-i | --add_denom", normalColor("新增幣別 - 讀取 denomList.xlsx") + warnColor("(-i)"))
-  .option("-1 | --icon <typeList...> <langList...>", normalColor("複製 icon") + warnColor("(-1)"))
   .option("-j | --fix_json <str>", successColor("格式化 json 字串 ") + warnColor("(-j str)"))
   .option("-k | --update_denom <denom...>", normalColor("更新幣別面額"))
   .option("-l | --set_denom", successColor("設定幣別 - 讀取 updateDenomList.xlsx") + warnColor("(-l)"))
@@ -67,6 +67,8 @@ Example:
   .option("-x | --set_currency", normalColor("設定預設幣別面額 - 讀取 game_default_currency_denom.xlsx、game_currency_denom_setting.xlsx (有gameId)") + warnColor("(-x)"))
   .option("-y | --fetch_retry <opts...>", successColor("fetch retry"))
   .option("-z | --list", normalColor("顯示 npm 全域安裝的所有套件"))
+  .option("-1 | --icon <typeList...> <langList...>", normalColor("複製 icon") + warnColor("(-1)"))
+  .option("-2 | --change_date_file", normalColor("改日期並存檔"))
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
   .configureOutput({
     // 此處使輸出變得容易區分
@@ -101,6 +103,93 @@ if (!opts.non_debug) {
       console.log(`command type: ${key} ${program.getOptionValue(key)}`) // 一個一行印
     }
   }
+}
+
+/**
+ * 改日期並存檔
+ */
+ if (opts.change_date_file) {
+  let mStartDate = [
+    '01', '01', '01',
+    '02', '02', '02',
+    '03', '03', '03',
+    '04', '04', '04',
+    '05', '05', '05',
+    '06', '06', '06', 
+    '07', '07', '07',
+  ]
+  let dStartDate = [
+    '01', '11', '21',
+    '01', '11', '21',
+    '01', '11', '21',
+    '01', '11', '21',
+    '01', '11', '21',
+    '01', '11', '21',
+    '01', '11', '21',
+  ]
+  let mEndDate = [
+    '01', '01', '02',
+    '02', '02', '03',
+    '03', '03', '04',
+    '04', '04', '05',
+    '05', '05', '06',
+    '06', '06', '07',
+    '07', '07', '08',
+  ]
+  let dEndDate  = [
+    '11', '21', '01',
+    '11', '21', '01',
+    '11', '21', '01',
+    '11', '21', '01',
+    '11', '21', '01',
+    '11', '21', '01',
+    '11', '21', '01',
+  ]
+
+  let index = 0
+  for (let step = 1; step <= 21; step++) {
+    console.log(`alter${step}.sql`)
+    let dateStart = `2022-${mStartDate[index]}-${dStartDate[index]} 00:00:00`
+    console.log(dateStart)
+    let dateEnd = `2022-${mEndDate[index]}-${dEndDate[index]} 00:00:00`
+    console.log(dateEnd)
+
+    writeAlterByFileName("./", `alter${step}.sql`, `
+SET @start_time = '${dateStart}';
+
+SET @end_time = '${dateEnd}';
+
+DELETE FROM wagers_1.user_revenue_player WHERE AccountDate >= @start_time AND AccountDate < @end_time;
+DELETE FROM wagers_1.user_revenue_agent WHERE AccountDate >= @start_time AND AccountDate < @end_time;
+DELETE FROM wagers_1.user_revenue_hall WHERE AccountDate >= @start_time AND AccountDate < @end_time;
+DELETE FROM wagers_1.game_revenue_player WHERE AccountDate >= @start_time AND AccountDate < @end_time;
+DELETE FROM wagers_1.game_revenue_agent WHERE AccountDate >= @start_time AND AccountDate < @end_time;
+DELETE FROM wagers_1.game_revenue_hall WHERE AccountDate >= @start_time AND AccountDate < @end_time;
+
+
+INSERT INTO wagers_1.user_revenue_player( Id,AccountDate,Rounds,BaseRounds,Cid,UserName,UpId,HallId,CryDef,Currency,ExCurrency,IsDemo,RealBetGold,BetGold,BetPoint,WinGold,JPPoint,JPGold,JPConGoldOriginal,JPRealBetGold ) SELECT Id,AccountDate,Rounds,BaseRounds,Cid,UserName,UpId,HallId,CryDef,Currency,ExCurrency,IsDemo,RealBetGold,BetGold,BetPoint,WinGold,JPPoint,JPGold,JPConGoldOriginal,JPRealBetGold FROM ( SELECT MD5(CONCAT_WS('-',Cid, MAX(left(AddDate,15)),Currency,ExCurrency,CryDef )) AS Id,MAX(CONCAT(left(AddDate, 15), "0:00")) AS AccountDate,count(Cid) AS Rounds,SUM(IF(IsFreeGame = 0, 1, 0)) AS BaseRounds,MAX(Cid) AS Cid,MAX(UserName) AS UserName,MAX(UpId) AS UpId,MAX(HallId) AS HallId,MAX(CryDef) AS CryDef,MAX(Currency) AS Currency,MAX(ExCurrency) AS ExCurrency,MAX(IsDemo) AS IsDemo,SUM( TRUNCATE(RealBetGold / 1000,2) * 1000 ) AS RealBetGold,SUM( TRUNCATE(BetGold / 1000,2) * 1000 ) AS BetGold,SUM( TRUNCATE(BetPoint / 1000,2) *1000 ) AS BetPoint,SUM( TRUNCATE(WinGold / 1000,2) *1000 ) AS WinGold,SUM( TRUNCATE(JPPoint / 1000,2) *1000 ) AS JPPoint,SUM( TRUNCATE(JPGold / 1000,2) *1000 ) AS JPGold,SUM( TRUNCATE(JPConGoldOriginal / 1000,4) * 1000) AS JPConGoldOriginal,SUM(IF(JPConGoldOriginal > 0, TRUNCATE(RealBetGold / 1000,2) * 1000, 0)) AS JPRealBetGold FROM  wagers_1.wagers_bet AS w    WHERE AddDate >= @start_time AND AddDate < @end_time AND IsValid = 1 AND IsDemo = 0 GROUP BY w.Cid,left(w.AddDate,15),w.Currency,w.ExCurrency,w.CryDef,w.IsDemo ) tempTable  ON DUPLICATE KEY UPDATE Rounds=tempTable.Rounds , BaseRounds=tempTable.BaseRounds , RealBetGold=tempTable.RealBetGold , BetGold=tempTable.BetGold , BetPoint=tempTable.BetPoint , WinGold=tempTable.WinGold , JPPoint=tempTable.JPPoint , JPGold=tempTable.JPGold , JPConGoldOriginal=tempTable.JPConGoldOriginal , UpId=tempTable.UpId , JPRealBetGold=tempTable.JPRealBetGold;
+
+INSERT INTO wagers_1.user_revenue_agent( Id,AccountDate,Rounds,BaseRounds,Cid,HallId,CryDef,Currency,ExCurrency,IsDemo,RealBetGold,BetGold,BetPoint,WinGold,JPPoint,JPGold,JPConGoldOriginal,JPRealBetGold ) SELECT Id,AccountDate,Rounds,BaseRounds,Cid,HallId,CryDef,Currency,ExCurrency,IsDemo,RealBetGold,BetGold,BetPoint,WinGold,JPPoint,JPGold,JPConGoldOriginal,JPRealBetGold FROM ( SELECT MD5(CONCAT_WS('-',p.UpId,p.AccountDate,p.Currency,p.ExCurrency,p.CryDef)) AS Id,p.AccountDate,SUM(p.Rounds) AS Rounds,SUM(p.BaseRounds) AS BaseRounds,p.UpId AS Cid,MAX(p.HallId) AS HallId,p.CryDef,p.Currency,p.ExCurrency,MAX(p.IsDemo) AS IsDemo,SUM( TRUNCATE(RealBetGold / 1000,2) * 1000 ) AS RealBetGold,SUM( TRUNCATE(p.BetGold / 1000,2) * 1000 ) AS BetGold,SUM( TRUNCATE(p.BetPoint / 1000,2) *1000 ) AS BetPoint,SUM( TRUNCATE(p.WinGold / 1000,2) *1000 ) AS WinGold,SUM( TRUNCATE(p.JPPoint / 1000,2) *1000 ) AS JPPoint,SUM( TRUNCATE(p.JPGold / 1000,2) *1000 ) AS JPGold,SUM( TRUNCATE(JPConGoldOriginal / 1000,4) * 1000) AS JPConGoldOriginal,SUM(JPRealBetGold) AS JPRealBetGold FROM  wagers_1.user_revenue_player p  LEFT JOIN game.customer c ON c.Cid = p.UpId  WHERE p.AccountDate >= @start_time AND p.AccountDate < @end_time AND c.IsDemo = 0 GROUP BY p.UpId,p.AccountDate,p.Currency,p.ExCurrency,p.CryDef,c.IsDemo ) tempTable  ON DUPLICATE KEY UPDATE Rounds=tempTable.Rounds , BaseRounds=tempTable.BaseRounds , RealBetGold=tempTable.RealBetGold , BetGold=tempTable.BetGold , BetPoint=tempTable.BetPoint , WinGold=tempTable.WinGold , JPPoint=tempTable.JPPoint , JPGold=tempTable.JPGold , JPConGoldOriginal=tempTable.JPConGoldOriginal , JPRealBetGold=tempTable.JPRealBetGold;
+
+INSERT INTO wagers_1.user_revenue_hall( Id,AccountDate,Rounds,BaseRounds,Upid,Cid,CryDef,Currency,ExCurrency,RealBetGold,BetGold,BetPoint,WinGold,JPPoint,JPGold,JPConGoldOriginal,JPRealBetGold ) SELECT Id,AccountDate,Rounds,BaseRounds,Upid,Cid,CryDef,Currency,ExCurrency,RealBetGold,BetGold,BetPoint,WinGold,JPPoint,JPGold,JPConGoldOriginal,JPRealBetGold FROM ( SELECT MD5(CONCAT_WS('-',a.HallId, a.AccountDate,a.Currency,a.ExCurrency,a.CryDef)) AS Id,AccountDate,SUM(a.Rounds) AS Rounds,SUM(a.BaseRounds) AS BaseRounds,Upid,a.HallId AS Cid,a.CryDef,a.Currency,a.ExCurrency,SUM( TRUNCATE(RealBetGold / 1000,2) * 1000 ) AS RealBetGold,SUM( TRUNCATE(a.BetGold / 1000,2) * 1000 ) AS BetGold,SUM( TRUNCATE(a.BetPoint / 1000,2) * 1000 ) AS BetPoint,SUM( TRUNCATE(a.WinGold / 1000,2) * 1000 ) AS WinGold,SUM( TRUNCATE(a.JPPoint / 1000,2) * 1000 ) AS JPPoint,SUM( TRUNCATE(a.JPGold / 1000,2) * 1000 ) AS JPGold,SUM( TRUNCATE(JPConGoldOriginal / 1000,4) * 1000) AS JPConGoldOriginal,SUM( a.JPRealBetGold ) AS JPRealBetGold FROM  wagers_1.user_revenue_agent a  LEFT JOIN game.customer c ON c.Cid = a.HallId  WHERE a.AccountDate >= @start_time AND a.AccountDate < @end_time GROUP BY a.HallId,a.AccountDate,a.Currency,a.ExCurrency,a.CryDef,a.IsDemo ) tempTable  ON DUPLICATE KEY UPDATE Rounds=tempTable.Rounds , BaseRounds=tempTable.BaseRounds , RealBetGold=tempTable.RealBetGold , BetGold=tempTable.BetGold , BetPoint=tempTable.BetPoint , WinGold=tempTable.WinGold , JPPoint=tempTable.JPPoint , JPGold=tempTable.JPGold , JPConGoldOriginal=tempTable.JPConGoldOriginal , JPRealBetGold=tempTable.JPRealBetGold;
+
+INSERT INTO wagers_1.game_revenue_player( Id,AccountDate,Rounds,BaseRounds,GGId,GameId,CryDef,Currency,ExCurrency,Cid,UserName,UpId,HallId,IsDemo,RealBetGold,BetGold,BetPoint,WinGold,JPPoint,JPGold,JPConGoldOriginal,JPRealBetGold ) SELECT Id,AccountDate,Rounds,BaseRounds,GGId,GameId,CryDef,Currency,ExCurrency,Cid,UserName,UpId,HallId,IsDemo,RealBetGold,BetGold,BetPoint,WinGold,JPPoint,JPGold,JPConGoldOriginal,JPRealBetGold FROM ( SELECT MD5(CONCAT_WS('-', GameId, Cid, MAX(LEFT(AddDate,15)),Currency,ExCurrency,CryDef)) AS Id,MAX(CONCAT(LEFT(AddDate, 15), "0:00")) AS AccountDate,count(Cid) AS Rounds,SUM(IF(IsFreeGame = 0, 1, 0)) AS BaseRounds,MAX(GGId) AS GGId,GameId,CryDef,Currency,ExCurrency,Cid,MAX(UserName) AS UserName,MAX(UpId) AS UpId,MAX(HallId) AS HallId,MAX(IsDemo) AS IsDemo,SUM( TRUNCATE(RealBetGold / 1000,2) * 1000 ) AS RealBetGold,SUM( TRUNCATE( BetGold / 1000,2) * 1000 ) AS BetGold,SUM( TRUNCATE( BetPoint / 1000,2) * 1000 ) AS BetPoint,SUM( TRUNCATE( WinGold / 1000,2) * 1000 ) AS WinGold,SUM( TRUNCATE( JPPoint / 1000,2) * 1000 ) AS JPPoint,SUM( TRUNCATE( JPGold / 1000,2) * 1000 ) AS JPGold,SUM( TRUNCATE( JPConGoldOriginal / 1000,4) * 1000) AS JPConGoldOriginal,SUM(IF(JPConGoldOriginal > 0, TRUNCATE(RealBetGold / 1000,2) * 1000, 0)) AS JPRealBetGold FROM  wagers_1.wagers_bet   WHERE AddDate >= @start_time AND AddDate < @end_time AND IsValid = 1 AND IsDemo = 0 GROUP BY GameId,Cid,LEFT(AddDate,15),Currency,ExCurrency,CryDef ) tempTable  ON DUPLICATE KEY UPDATE Rounds=tempTable.Rounds , BaseRounds=tempTable.BaseRounds , RealBetGold=tempTable.RealBetGold , BetGold=tempTable.BetGold , BetPoint=tempTable.BetPoint , WinGold=tempTable.WinGold , JPPoint=tempTable.JPPoint , JPGold=tempTable.JPGold , JPConGoldOriginal=tempTable.JPConGoldOriginal , GameId=tempTable.GameId , JPRealBetGold=tempTable.JPRealBetGold;
+
+INSERT INTO wagers_1.game_revenue_agent( Id,AccountDate,Rounds,BaseRounds,GGId,GameId,CryDef,Currency,ExCurrency,Cid,HallId,IsDemo,RealBetGold,BetGold,BetPoint,WinGold,JPPoint,JPGold,JPConGoldOriginal,JPRealBetGold ) SELECT Id,AccountDate,Rounds,BaseRounds,GGId,GameId,CryDef,Currency,ExCurrency,Cid,HallId,IsDemo,RealBetGold,BetGold,BetPoint,WinGold,JPPoint,JPGold,JPConGoldOriginal,JPRealBetGold FROM ( SELECT MD5(CONCAT_WS('-', p.GameId,p.UpId,p.AccountDate,p.Currency,p.ExCurrency,p.CryDef)) AS Id,p.AccountDate,SUM(p.Rounds) AS Rounds,SUM(p.BaseRounds) AS BaseRounds,MAX(p.GGId) AS GGId,p.GameId,p.CryDef,p.Currency,p.ExCurrency,MAX(p.UpId) AS Cid,MAX(p.HallId) AS HallId,MAX(p.IsDemo) AS IsDemo,SUM( TRUNCATE(RealBetGold / 1000,2) * 1000 ) AS RealBetGold,SUM( TRUNCATE(p.BetGold / 1000,2) * 1000 ) AS BetGold,SUM( TRUNCATE(p.BetPoint / 1000,2) * 1000 ) AS BetPoint,SUM( TRUNCATE(p.WinGold / 1000,2) * 1000 ) AS WinGold,SUM( TRUNCATE(p.JPPoint / 1000,2) * 1000 ) AS JPPoint,SUM( TRUNCATE(p.JPGold / 1000,2) * 1000 ) AS JPGold,SUM( TRUNCATE(JPConGoldOriginal / 1000 , 4) * 1000 ) AS JPConGoldOriginal,SUM(JPRealBetGold) AS JPRealBetGold FROM  wagers_1.game_revenue_player p  LEFT JOIN game.customer c ON c.Cid = p.UpId  WHERE p.AccountDate >= @start_time AND p.AccountDate < @end_time AND c.IsDemo = 0 GROUP BY p.GameId,p.UpId,p.AccountDate,p.Currency,p.ExCurrency,p.CryDef,c.IsDemo ) tempTable  ON DUPLICATE KEY UPDATE Rounds=tempTable.Rounds , BaseRounds=tempTable.BaseRounds , RealBetGold=tempTable.RealBetGold , BetGold=tempTable.BetGold , BetPoint=tempTable.BetPoint , WinGold=tempTable.WinGold , JPPoint=tempTable.JPPoint , JPGold=tempTable.JPGold , JPConGoldOriginal=tempTable.JPConGoldOriginal , GameId=tempTable.GameId , JPRealBetGold=tempTable.JPRealBetGold;
+
+INSERT INTO wagers_1.game_revenue_hall( Id,AccountDate,Rounds,BaseRounds,GGId,GameId,CryDef,Currency,ExCurrency,Upid,Cid,RealBetGold,BetGold,BetPoint,WinGold,JPPoint,JPGold,JPConGoldOriginal,JPRealBetGold ) SELECT Id,AccountDate,Rounds,BaseRounds,GGId,GameId,CryDef,Currency,ExCurrency,Upid,Cid,RealBetGold,BetGold,BetPoint,WinGold,JPPoint,JPGold,JPConGoldOriginal,JPRealBetGold FROM ( SELECT MD5(CONCAT_WS('-', a.GameId, MAX(a.Cid), a.HallId,a.AccountDate,a.Currency,a.ExCurrency,a.CryDef)) AS Id,AccountDate,SUM(a.Rounds) AS Rounds,SUM(a.BaseRounds) AS BaseRounds,MAX(a.GGId) AS GGId,a.GameId,a.CryDef,a.Currency,a.ExCurrency,c.Upid AS Upid, MAX(a.HallId) AS Cid,SUM( TRUNCATE(RealBetGold / 1000,2) * 1000 ) AS RealBetGold,SUM( TRUNCATE(a.BetGold / 1000,2) * 1000 ) AS BetGold,SUM( TRUNCATE(a.BetPoint / 1000,2) * 1000) AS BetPoint,SUM( TRUNCATE(a.WinGold / 1000,2) * 1000) AS WinGold,SUM( TRUNCATE(a.JPPoint / 1000,2) * 1000) AS JPPoint,SUM( TRUNCATE(a.JPGold / 1000,2) * 1000) AS JPGold,SUM( TRUNCATE(JPConGoldOriginal / 1000 , 4) * 1000 ) AS JPConGoldOriginal,SUM(JPRealBetGold) AS JPRealBetGold FROM  wagers_1.game_revenue_agent a  LEFT JOIN game.customer c ON c.Cid = a.HallId  WHERE a.AccountDate >= @start_time AND a.AccountDate < @end_time GROUP BY a.GameId,a.HallId,a.AccountDate,a.Currency,a.ExCurrency,a.CryDef ) tempTable  ON DUPLICATE KEY UPDATE Rounds=tempTable.Rounds , BaseRounds=tempTable.BaseRounds , RealBetGold=tempTable.RealBetGold , BetGold=tempTable.BetGold , BetPoint=tempTable.BetPoint , WinGold=tempTable.WinGold , JPPoint=tempTable.JPPoint , JPGold=tempTable.JPGold , JPConGoldOriginal=tempTable.JPConGoldOriginal , GameId=tempTable.GameId , JPRealBetGold=tempTable.JPRealBetGold;
+
+
+call wagers_1.sp_checkoutGameRevenueHall(@start_time,@end_time);
+call wagers_1.sp_checkoutUserRevenueHall(@start_time,@end_time);
+    `)
+
+    console.log("")
+
+    index += 1
+  } 
+
+  console.log(`程式結束!`)
 }
 
 /**
