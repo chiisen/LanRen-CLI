@@ -103,7 +103,7 @@ function icon(typeList, sizeList, langList, isShowGameIdLog = false) {
 
               fs.readdirSync(gameIdDir).forEach((file) => {
 
-                const isLang = langListArray.some((item) => file.includes("_" + item))
+                const isLang = langListArray.some((item) => file.includes("_" + item + ".png"))
                 if (isLang) {
                   const newFilePath = newGameIdPath + file
                   const gameIdFile = gameIdDir + file
