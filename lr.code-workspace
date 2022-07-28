@@ -25,6 +25,9 @@
 			"titleBar.inactiveForeground": "#15202b99"
 		},
 		"peacock.color": "#61dafb",
-		"commentTranslate.multiLineMerge": true
+		"commentTranslate.multiLineMerge": true,
+		"cSpell.words": [
+			"Upid"
+		]
 	}
 }
