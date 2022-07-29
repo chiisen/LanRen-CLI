@@ -7,7 +7,6 @@ const clc = require("cli-color")
 const program = require("commander")
 const shell = require("shelljs")
 const fetch = require("node-fetch-retry")
-const { writeAlterByFileName } = require("./file/file")
 
 const rsa = require("./rsa/rsa")
 
@@ -28,7 +27,7 @@ const { url_token } = require("./commander/url_token")
 const { fixJson } = require("./commander/fix_json")
 const { denomIndexArray, denomArray } = require("./commander/denomIndexArray")
 const { icon } = require("./commander/icon")
-const { change_date_file } = require("./template/change_date_file")
+const { changeDateFile } = require("./template/change_date_file")
 
 const package = require("./package.json")
 
