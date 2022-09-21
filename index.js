@@ -52,11 +52,11 @@ Example:
   )
   .option(
     "-f | --denom <list>",
-    normalColor("將面額字串陣列轉成數值陣列") + errorColor("(請先去掉雙引號)") + warnColor("(-f list)")
+    normalColor("面額【字串】陣列轉成【數值】陣列") + errorColor("(請先去掉雙引號)") + warnColor("(-f list)")
   )
   .option(
     "-g | --denomNum <list>",
-    successColor("將面額數值陣列轉成字串陣列") + errorColor("(雙引號可用空白取代)") + warnColor("(-g list)")
+    successColor("面額【數值】陣列轉成【字串】陣列") + errorColor("(雙引號可用空白取代)") + warnColor("(-g list)")
   ) // g 的下個字母 -h 預設為說明
   .option("-i | --add_denom", normalColor("新增幣別 - 讀取 denomList.xlsx") + warnColor("(-i)"))
   .option("-j | --fix_json <str>", successColor("格式化 json 字串 ") + warnColor("(-j str)"))
@@ -291,20 +291,21 @@ if (opts.ver) {
   console.log(clc.magenta("keywords: ") + clc.red(package.keywords))
 }
 /**
- * 將面額字串陣列轉成數值陣列
+ * -f --denom 將面額【字串】陣列轉成【數值】陣列
  */
 if (opts.denom) {
   const str = program.getOptionValue("denom")
   const arr = denomIndexArray(str)
-  console.log("面額字串陣列轉成數值陣列: " + clc.yellow(arr))
+  console.log("面額【字串】陣列轉成【數值】陣列: " + clc.yellow(arr))
 }
 
 /**
- * 將面額數值陣列轉成字串陣列
+ * -g --denomNum 將面額【數值】陣列轉成【字串】陣列
  */
 if (opts.denomNum) {
   const str = program.getOptionValue("denomNum")
-  denomArray(str)
+  const arr = denomArray(str)
+  console.log("面額【數值】陣列轉成【字串】陣列: " + clc.yellow(arr))
 }
 
 /**
