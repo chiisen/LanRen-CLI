@@ -266,7 +266,8 @@ if (opts.ver) {
  */
 if (opts.denom) {
   const str = program.getOptionValue("denom")
-  denomIndexArray(str)
+  const arr = denomIndexArray(str)
+  console.log("面額字串陣列轉成數值陣列: " + clc.yellow(arr))
 }
 
 /**
