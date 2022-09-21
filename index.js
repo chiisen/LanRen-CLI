@@ -89,6 +89,7 @@ Example:
   .option("-z | --list", normalColor("顯示 npm 全域安裝的所有套件"))
   .option("-1 | --icon <typeList...> <langList...>", normalColor("複製 icon") + warnColor("(-1)"))
   .option("-2 | --change_date_file", normalColor("改日期並存檔"))
+  .option("-3 | --secure_token <dc...> <ts...> <secureKey...>", successColor("產生 secureToken"))
   .showHelpAfterError(errorColor("<使用 -h 參數可以提示更多使用功能>")) // 錯誤提示訊息
   .configureOutput({
     // 此處使輸出變得容易區分
@@ -123,6 +124,34 @@ if (!opts.non_debug) {
       console.log(`command type: ${key} ${program.getOptionValue(key)}`) // 一個一行印
     }
   }
+}
+
+/**
+ * 產生 secureToken
+ */
+if(opts.secure_token) {
+
+  console.log(`secureToken = SHA256(dc + ts + secureKey).digest("hex")`)
+
+  const option = program.getOptionValue("secure_token")
+
+  const dc = option[0]
+  const ts = option[1]
+  const secureKey = option[2]
+
+  console.log(`dc: ${dc}
+  ts: ${ts}
+  secureKey: ${secureKey}`)
+
+  const combination = dc + ts + secureKey
+
+  console.log(`combination: ${combination}`)
+
+  const factory = crypto.createHash("sha256")
+  factory.update(combination)
+  const hash = factory.digest("hex")
+  console.log(`secureToken= ${hash}
+  程式結束!`)
 }
 
 /**

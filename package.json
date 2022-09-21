@@ -18,6 +18,7 @@
   "dependencies": {
     "cli-color": "^2.0.1",
     "commander": "^8.3.0",
+    "crypto": "^1.0.1",
     "csv-parse": "^5.0.4",
     "dayjs": "^1.11.0",
     "fix-json-format": "^1.0.0",
