@@ -1,4 +1,4 @@
-var clc = require("cli-color")
+const clc = require("cli-color")
 
 /**
  * 將面額字串陣列轉成數值陣列
@@ -108,7 +108,7 @@ function denomArray(str, isSort = false) {
   }
 
   const IdxArr = arr.map((x) => {
-    var n = Number(x)
+    const n = Number(x)
     const ret = denomMap.get(n)
     if (ret === undefined) {
       console.log(clc.magenta("找不到面額索引: ") + clc.red(x))
