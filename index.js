@@ -7,6 +7,7 @@ const clc = require("cli-color")
 const program = require("commander")
 const shell = require("shelljs")
 const fetch = require("node-fetch-retry")
+const dotenv = require("dotenv")
 
 const rsa = require("./rsa/rsa")
 
@@ -30,6 +31,16 @@ const { icon } = require("./commander/icon")
 const { changeDateFile } = require("./template/change_date_file")
 
 const package = require("./package.json")
+
+const envFile = ".env"
+if (!fs.existsSync(".env")) {
+  console.error(clc.red(`\n 讀檔失敗，找不到 ${envFile}`))
+  //process.exit(1)
+}
+
+dotenv.config()
+
+console.log("ENV: " + process.env["ENV"]) //ENV
 
 program
   .version(clc.redBright("Version: " + package.version))
@@ -129,8 +140,7 @@ if (!opts.non_debug) {
 /**
  * 產生 secureToken
  */
-if(opts.secure_token) {
-
+if (opts.secure_token) {
   console.log(`secureToken = SHA256(dc + ts + secureKey).digest("hex")`)
 
   const option = program.getOptionValue("secure_token")
