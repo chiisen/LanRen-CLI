@@ -3,16 +3,31 @@ const xlsx = require("node-xlsx") // 引入 node-xlsx 模組
 const fs = require("fs")
 
 /**
+ * 檢查是否為數值
+ * @param {*} val
+ * @returns
+ */
+function isNumeric(val) {
+  return /^-?\d+$/.test(val)
+}
+
+/**
  * 讀取 Excel
  *
- * @param {string} excelXlsx
+ * @param {string} fileName
  */
-function getExcel(excelXlsx) {
+function getExcel(fileName, isLog = false, sheetIndex = 0) {
   console.log(clc.cyan("excel-parse start"))
 
   const excel = []
-  const sheets = xlsx.parse(excelXlsx)
-  const sheet = sheets[0]
+  const sheets = xlsx.parse(fileName)
+  let sheet = undefined
+  if (isNumeric(sheetIndex.toString())) {
+    sheet = sheets[sheetIndex]
+  } else {
+    sheet = sheets.find((x) => x.name == sheetIndex)
+  }
+
   // 輸出每行內容
   sheet.data.forEach((row) => {
     // 陣列格式, 根據不同的索引取數據
