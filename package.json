@@ -22,6 +22,7 @@
     "crypto": "^1.0.1",
     "csv-parse": "^5.0.4",
     "dayjs": "^1.11.0",
+    "deasync": "^0.1.30",
     "dotenv": "^16.0.3",
     "fix-json-format": "^1.0.0",
     "folder-zip-sync": "^1.0.5",
